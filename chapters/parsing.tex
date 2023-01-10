@@ -1,0 +1,181 @@
+\section*{Parsing}
+\begin{itemize}
+	\item Derivation Orders
+	\begin{itemize}
+		\item Productions of the grammar can be applied in any order. There are two standard orders:
+		\begin{itemize}
+			\item Leftmost derivation: Find the left-most nonterminal and apply a production to it
+			\item Rightmost derivation: Find the right-most nonterminal and apply a production there
+		\end{itemize}
+	\end{itemize}
+	\item LL \& LR Parsing
+	\begin{itemize}
+
+		\item Top-down vs. Bottom-up
+		\item There is a problem: Want to decide which production to apply based on the look-ahead symbol $\rightarrow$ LL(1) Grammars: not all grammars can be parsed top-down with a single lookahead.
+		\item LL(1) means \textbf{L}eft-to-right scanning, \textbf{L}eft-most derivation, \textbf{1} lookahead symbol.
+		\item Left-factoring a grammar can make it LL(1): If there is a common prefix we can add a new non-terminal at the decision point.
+		\item We also need to eliminate left-recursion: 
+		\begin{itemize}
+			\item $S \rightarrow S\; \alpha_1 \;|\; \cdots \;|\; S\; \alpha _n \;|\; \beta _1 \;|\; \cdots \;|\; \beta_m$
+			
+			Rewrite as
+			
+			$S\; \rightarrow \beta _1\; S' \;|\; \cdots \;|\; \beta _m\; S'$
+			
+			$S' \rightarrow \alpha_1\; S' \;|\;  \cdots \;|\; \alpha_n\; S' \;|\; \epsilon$ 
+		\end{itemize}
+		\item Predictive Parsing: Given an LL(1) grammar: For a given nonterminal, the lookahead symbol uniquely determines the production to apply - top-down parsing = predictive parsing - driven by a predictive parsing table: \textit{nonterminal x input token $\rightarrow$ production}
+		\item First / Follow
+		
+		Consider a given production $A \rightarrow \gamma$
+		
+		(Case 1) Construct the set of all input tokens that may appear \textbf{first} in strings that can be derived from $\gamma$ - Add the production $\rightarrow \gamma$ to the entry for each such token
+		
+		(Case 2) If $\gamma$ can derive $\epsilon$, then we construct the set of all input tokens that may \textbf{follow} the nonterminal $A$ in the grammar - Add the production $\rightarrow \gamma$ to the entry for each such token
+		\item Bottom-up Parsing (LR Parsers)
+		
+		LR(k) parser: \textbf{L}eft-to-right scanning, \textbf{R}ightmost derivation, \textbf{k} lookahead symbols
+		
+		Technique: "Shift-Reduce" parsers: Work bottom up instead of top down. Construct right-most derivation of a program in the grammar. Better error detection/recovery (poor error reporting)
+		
+		Parser state: Stack of terminals and nonterminals. Unconsumed input is a string of terminals. Current derivation step is stack + input
+		
+		\item Shift: Move look-ahead token to the stack
+		\item Reduce: Replace symbols $\gamma$ at the top of stack with nonterminal X s.t.  $X \rightarrow \gamma$ is a production. pop $\gamma$, push $X$. 	
+		\item Action Selection Problem:
+		\begin{itemize}
+		\item Given a stack $\sigma$ and a lookahead symbol $b$, should the parser \textbf{shift} $b$ onto the stack (new stack is $\sigma b$) , or \textbf{reduce} a production $X \mapsto \gamma$, assuming that $\sigma = \alpha \gamma$ (new stack if $\alpha X$)?
+		\item Sometimes the parser can reduce, but should not, sometimes the stack can be reduced in different ways
+		\item Main idea: Decide based on a prefix $\alpha$ of the stack plus look-ahead
+		\end{itemize}
+		\item $LR(0)$ states: $LR(0)$ state: items to track progress on possible upcoming reductions. $LR(0)$ item: a production with an extra separator "." in the rhs.
+		\item Run parser state though a DFA. DFA can be represented as a table of shape state $\times$ (terminals + nonterminals). two types of actions: shift and go to state n, reduce using reduction $X \mapsto \gamma$
+	\end{itemize}
+\end{itemize}
+
+
+\section*{Types}
+\begin{itemize}
+	\item LUB = Least upper bound
+	\item Soundness of a subtypinig rule = Matches subset relation of value set
+	\item argument type is contravariant, output type is covariant
+	\begin{itemize}
+		\item It's okay if a function takes more arguments
+		\item It's okay if a function returns less arguments
+	\end{itemize}
+	\item Mutable structure are invariant: covariant reference types are unsound, contravariant reference types are also unsound
+	\item Mutable structures are invariant
+	\item Structural vs. Nominal Typing
+\end{itemize}
+\subsection*{OAT Type System}
+\begin{itemize}
+	\item Primitive (non-reference) types: int, bool
+	\item Definitely non-null reference types: R (named) mutable structs with width subtyping, strings, arrays - Possibly-null reference types: R?
+\end{itemize}
+\section*{Compiling Objects}
+\begin{itemize}
+	\item Objects contain a pointer to a dispatch vector (also called vtable) with pointers to method code. 
+	\item DV layout of new method is appended to the class which is being extended
+	\item Multiple Inheritance approaches: Allow multiple DV tables (C++) Choose which DV to use based on static types, casting requires runtime operations; Use a level of indirection: Map method identifiers to code pointers using a hash table, search up through the class hierarchy; Give up separate compilation: Use sparse dispatch vectors or binary decision trees.
+	\item Multiple Dispatch Vectors:Objects may have multiple entry points with individual DVs, casts change entry point of a variable
+\end{itemize}
+
+
+\section*{Optimizations}
+\begin{itemize}
+	\item Problem: many optimizations trade space for time (e.g. Loop unrolling)
+	\item Constant Folding: If operands are statically known, compute value at compile-time (has to preformed at every stage of optimization - constant expressions can be created by translation or earlier optimizations / can enable further optimizations). Also: Algebraic Simplification (Use mathematical identities)
+	\item Copy Propagation: For x = y replace uses of x with y
+	\item Dead Code Elimination: If side-effect free code can never be observed, safe to eliminate it
+	\item Inlining: Replace a function call with the body of the function (arguments are rewritten)
+	\item Code Specialization: Create Specialized versions of a function that is called form different places with different arguments.
+	\item Common Subexpression Elimination: In some sense, it is the opposite of inlining: fold redundant computations together
+	\item Loop Optimizations
+	\begin{itemize}
+		\item Hot spots often occur in loops (esp. inner loops)
+		\item Loop Invariant Code Motion
+		\item Strength Reduction (replace expensive ops by cheap ones by creating a dependent induction variable)
+		\item Loop unrolling
+	\end{itemize}
+\end{itemize}
+
+
+\subsection*{Code Analysis}
+\begin{itemize}
+	\item Liveness
+	\begin{itemize}
+		\item Observation: uid1 and uid2 can be assigned to the same register if their values will not be needed at the same time. Liveness property is more fine grained than scope.
+		\item Liveness analysis is one example of dataflow analysis: A variable $v$ is live on edge $e$ if there is a node n in the CFG such that use[n] contains $v$ and a directed path from e to n such that for every statement $s'$ on the path def[$s'$] does not contain $v$
+		\item Dataflow: Compute information for all variables simultaneously. Solve the equations by iteratively converging on a solution: Start with a rough approximation to the answer, refine the answer at each iteration, keep going until nor more refinement is possible.
+		\end{itemize}
+		\end{itemize}
+	Liveness: backward, may (out = union in, in = gen union (out $\setminus$ kill))
+		
+		Reaching: forward, may (in = union out, out = gen union (in $\setminus$ kill))
+		
+		Very busy: background, must (out = intersection in, in = gen union (out $\setminus$ kill))
+		
+		Available: forward, must (in = intersection out, out = gen union (in $\setminus$ kill))
+		
+		Key idea: Iterative solution of a system of equations over a lattice. Iteration terminates if flow functions are monotonic, equivalent to the MOP answer if flow functions distribute over meet
+
+\subsection*{Register Allocation}
+\begin{itemize}
+	\item Register Allocation: Compute liveness information for each temp, create an infereence graph, try to color the graph.
+	\item Kempe: 1. Find a node with degree < k and cut it out of the graph, 2. Recursively k-color the remaining subgraph, 3. When remaining graph is colored, there must be at least one free color available for the deleted node. If the graph cannot be colored we spill that node.
+	\item Precolored nodes: Certain variables must be pre-assigned to registers (call, imul, caller-save registers)
+\end{itemize}
+\subsection*{Very busy Expressions}
+\begin{itemize}
+	\item Expression e is very busy at location p of every path from p must evaluate e before any variable in e is redefined - backward, must
+\end{itemize}
+\subsection*{Loops}
+\begin{itemize}
+	\item A loop is a strongly connected component (head reachable from each node)
+	\item Concept of dominators: A dominates B = if the only way to reach B from start node is via A. A loop contains at least 1 back edge. (back edge = target dominates the source)
+	\item dom is transitive and anti-symmetric, can be computed as a forward dataflow analysis
+\end{itemize}
+\subsection*{SSA}
+\begin{itemize}
+	\item Where to Place phi functions: Compute dominance frontier:
+	\item for all nodes B:
+
+		\item if $\#$(pred [$B$]) $\geq$ $2$
+		\begin{itemize}
+			\item for each $p$ $\in$ pred [$B$]
+			\begin{itemize}
+				\item runner $:=$ $p$
+				\item while (runner $\neq$ doms[$B$])
+				\begin{itemize}
+					\item DF [runner] $:=$ DF [runner] $\cup$ $\{B\}$
+					\item runner $:=$ doms [runner]
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+	\item phi nodes can be placed at dominator tree join nodes
+	\item eliminate phi nodes after optmization
+\end{itemize}
+
+
+\section*{GC}
+\begin{itemize}
+	
+	\item Garbage: An object x is reachable iff a register contains a pointer to x or another reachable object y contains a pointer to x
+	\item reachable objects can be found by starting from registers and following all pointers
+
+\item Mark and Sweep
+	
+	When memory runs out, GC executes two phases: mark phase: trace reachable objects; sweep phase: collects garbage objects (extra bit reserved for memory management)
+	
+	pointer reversal can be used to allow auxiliary data to be stored in the objects.
+	\item Stop and Copy
+	
+	Memory is organized into two areas: Old space (used for allocation), new space (use as a reserve for GC)
+	
+	When old space is full all reachable objects are moved, old and new are swapped.
+	\item Reference Counting
+	
+	Store number of references in the object itself, assignments modify that number. Cannot collect circular structures.
+	
+\end{itemize}
