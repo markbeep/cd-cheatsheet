@@ -10,7 +10,7 @@
 \usepackage[dvipsnames]{xcolor}
 
 % Set page margins
-\geometry{top=.8cm, left=.8cm, right=.8cm, bottom=.8cm}
+\geometry{top=.5cm, left=.5cm, right=.5cm, bottom=.5cm}
 
 % Set paragraph indentation
 \setlength{\parindent}{0pt}
@@ -37,11 +37,23 @@
 
 % main heading
 \begin{center}
-	\Large{\textbf{Computer Systems}} \\
+	\Large{\textbf{Compiler Design}} \\
     \small{by dcamenisch}
 \end{center}
 
 \input{chapters/introduction.tex}
+
+The simplified compiler has the following structure:
+\begin{itemize}
+	\item Lexical Analysis
+	\item Parsing
+	\item Intermediate Code Generation
+	\item Code Generation
+\end{itemize}
+
+\input{chapters/x86.tex}
+\input{chapters/intermediate.tex}
+\input{chapters/llvm.tex}
 
 \end{multicols*}
 \end{document}
