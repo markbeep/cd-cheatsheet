@@ -1,0 +1,119 @@
+\section*{Optimizations}
+There are different kinds of optimization: Power, Space, Time.
+
+\begin{itemize}
+	\item Constant Folding: If operands are statically known, compute value at compile-time. More general algebraic simplification: Use mathematical identities.
+	
+	\item Constant Propagation: If $x$ is a constant replace its uses by the constant.
+	
+	\item Copy Propagation: For $x = y$ replace uses of $x$ with $y$
+	
+	\item Dead Code Elimination: If side-effect free code can never be observed, safe to eliminate it.
+	
+	\item Inlining: Replace a function call with the body of the function (arguments are rewritten to local variables).
+	
+	\item Code Specialization: Create Specialized versions of a function that is called form different places with different arguments.
+	
+	\item Common Subexpression Elimination: It is the opposite of inlining, fold redundant computations together.
+	
+	\item Loop Optimizations
+	\begin{compactitem}
+		\item Hot spots often occur in loops (esp. inner loops)
+		\item Loop Invariant Code Motion (hoist outside)
+		\item Strength Reduction (replace expensive ops by cheap ones by creating a dependent induction variable)
+		\item Loop Unrolling
+	\end{compactitem}
+\end{itemize}
+
+
+\subsection*{Liveness Analysis}
+\begin{itemize} 
+	\item \texttt{uid1} and \texttt{uid2} can be assigned to the same register if their values are not needed at the same time (more fine grained than scope).
+	
+	\item A variable $v$ is live at a point $L$, if $v$ is defined before $L$ and used after $L$.
+		
+	\item For a statement (node) $s$ we define: 
+	\begin{compactitem}
+		\item use[$s$] : set of variables used by $s$
+		\item def[$s$] : set of variables define by $s$
+		\item in[$s$] : set of variables live on entry to $n$
+		\item out[$s$] : set of variables live on exit from $n$
+	\end{compactitem}
+	
+	\item It holds: in[$n$] $\supseteq$ use[$n$], in[$n$] $\supseteq$ out[$n$] $\backslash$ def[$n$] and out[$n$] $\supseteq$ in[$n'$] if $n' \in $ succ[$n$].
+		
+	\item A variable $v$ is live on edge $e$ if there is a node $n$ in the CFG such that use[$n$] contains $v$ and a directed path from $e$ to $n$ such that for every statement $s'$ on the path def[$s'$] does not contain $v$.
+		
+	\item Dataflow Analysis: Compute information for all variables simultaneously. Solve the equations by iteratively converging on a solution.
+\end{itemize}
+
+\textbf{Algorithm}
+\begin{lstlisting}
+	for all n, in[n] = [], out[n] = []
+	repeat until no change in 'in' and 'out'
+		for all n
+			out[n] = union of in[n'] for all n' in succ[n]
+			in[n] = use[n] union (out[n] \ def[n])
+\end{lstlisting}
+
+
+\subsection*{Register Allocation}
+\begin{itemize}
+	\item Linear-Scan Register Allocation: Compute liveness information and then scan through the program, for each instruction try to find an available register, else spill it on the stack.
+	
+	\item Graph Coloring: Compute liveness information for each temp, create an inference graph (nodes are temps and there is an edge if they are alive at the same time), try to color the graph.
+	
+	\item Kempe: 1. Find a node with degree $< k$ and cut it out of the graph, 2. Recursively $k$-color the remaining subgraph, 3. When remaining graph is colored, there must be at least one free color available for the deleted node. If the graph cannot be colored we spill a node.
+	\item Improve by adding \texttt{move} related edges (temps used in a move should have the same color).
+	
+	\item Precolored Nodes: Certain variables must be pre-assigned to registers (\texttt{call}, \texttt{imul}, caller-save registers)
+\end{itemize}
+
+
+\subsection*{Generalizing Dataflow Analysis}
+This type of iterative analysis for liveness also applies to other analyses.
+
+\begin{itemize}
+	\item Reaching Definitions: What variable def. reach a particular use of the variable? Used for constant / copy propagation.
+	\item Available Expressions: Want to perform subexpression elimination.
+\end{itemize}
+
+
+\subsection*{Very Busy Expressions}
+\begin{itemize}
+	\item Expression $e$ is very busy at location $p$ if every path from $p$ must evaluate $e$ before any variable in $e$ is redefined - backward, must
+\end{itemize}
+
+
+\subsection*{Loops}
+A loop is a set of nodes in the CFG, with a distinguished entry, the header, and exit nodes.
+\begin{itemize}
+	\item A loop is a strongly connected component (SSC), the head is reachable from each node and vice versa.
+	\item Concept of dominators: $A$ dominates $B$ ($A$ dom $B$), if the only way to reach $B$ from start node is via $A$. 
+	\item A loop contains at least 1 back edge (back edge = target dominates the source).
+	\item dom is transitive and anti-symmetric, can be computed as a forward dataflow analysis
+\end{itemize}
+
+
+\subsection*{Single Static Assignment (SSA)}
+Each LLVM IR \texttt{\%uid} can be assigned only once.
+\begin{itemize}
+	\item $\phi$ function chooses version of a variable by the path how control enters the $\phi$ node.
+	
+	\item The dominance frontier of a node $B$ is the set of all CFG nodes $y$ such that $B$ dominates a predecessor of $y$, but does not strictly dominate $y$. Intuitively: starting at $B$, there is a path to $y$, but there is another route that does not go through $B$.
+	
+	\item Location of the $\phi$ function can be computed by dominance frontier:
+	\begin{lstlisting}
+		for all nodes B
+			if num of pred[B] >= 2
+				for each p in pred[B]
+					runner = p
+					while runner != doms[B]
+						DF[runner] = DF[runner] union {B}
+						runner = doms[runner]
+	\end{lstlisting}
+		
+	\item $\phi$ nodes can be placed at dominator tree join nodes.
+	
+	\item eliminate $\phi$ nodes after optmization
+\end{itemize}

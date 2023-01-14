@@ -1,0 +1,31 @@
+\section*{Typing}
+
+Applying a set of inference rules allows for type checking of a program. 
+
+\begin{itemize}
+	\item A well-typed program either terminates in a well-defined way, or it continues computing forever.
+	
+	\item If we view types as sets of values, there is a natural inclusion relation Pos $ \subseteq $ Int. This gives rise to a subtype relation P $<:$ Int and to a subtyping hierarchy.
+
+	\item The LUB (least upper bound) is defined for two types $T_1 \vee T_2$.
+	
+	\item Soundness of a subtypinig rule = Matches subset relation of value set
+	
+	\item Argument type is contravariant (it is okay if a function takes more arguments), output type is covariant (it is okay if a function returns less arguments).
+	$$\frac{S_1 <: T_1 \qquad T_2 <: S_2}{(T_1 -> T_2) <: (S_1 -> S_2)}$$
+
+	\item Mutable structure are invariant: covariant / contravariant reference types are unsound.
+		
+	\item Structural vs. Nominal Typing - is type equality / subsumption defined by the structure or the name.
+\end{itemize}
+
+\subsection*{OAT Type System}
+\begin{itemize}
+	\item Primitive (non-reference) types: \texttt{int, bool}
+	
+	\item Definitely non-null reference types: \texttt{R} (named) mutable structs with width subtyping, \texttt{strings}, \texttt{arrays}
+	
+	\item Possibly-null reference types: \texttt{R?}
+	
+	\item Subtyping \texttt{R} $<:$ \texttt{R?}
+\end{itemize}

@@ -1,0 +1,25 @@
+\section*{Garbage Collection}
+\begin{itemize}
+	\item Garbage: An object \texttt{x} is reachable iff a register contains a pointer to \texttt{x} or another reachable object \texttt{y} contains a pointer to \texttt{x}.
+	
+	\item Reachable objects can be found by starting from registers and following all pointers
+
+	\item Mark and Sweep
+	
+	When memory runs out, GC executes two phases: mark phase: trace reachable objects; sweep phase: collects garbage objects (extra bit reserved for memory management)
+	
+	Pointer reversal can be used to allow auxiliary data to be stored in the objects.
+	
+	\item Stop and Copy
+	
+	Memory is organized into two areas: Old space (used for allocation), new space (use as a reserve for GC)
+	
+	When old space is full all reachable objects are moved, old and new are swapped. The new space is partitioned into copied and scanned, copied and empty regions.
+	
+	Copied and scanned contain objects whose pointer fields were followed and fixed, while the copied region contains the objects that where copied but whose pointer filed were not (yet) fixed.
+	
+	\item Reference Counting
+	
+	Store number of references in the object itself, assignments modify that number. If the reference count is zero, remove the object. Cannot collect circular structures.
+	
+\end{itemize}

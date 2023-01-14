@@ -1,4 +1,5 @@
 \section*{x86lite}
+
 \begin{itemize}
 	\item x86lite memory consists of $2^{64}$ bytes numbered \texttt{0x00000000} through \texttt{0x0xffffffff}, split into 8-byte quadwords (has to be quadword-aligned).
 	
@@ -20,8 +21,7 @@
 	
 	\item x86 assembly is organized into labeled blocks, indicating code locations used by jumps, etc. Program begins execution at designated label (\texttt{main}).
 	
-	
-	\item Calling Conventions (SYSTEM V AMD64 ABI):
+	\item Calling Conventions (SYSTEM V AMD64 ABI)
 	\begin{itemize}
 		\item Setup Stack Frame: \newline
 			\texttt{pushq \%rbp} \newline 

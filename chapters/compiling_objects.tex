@@ -1,0 +1,17 @@
+\section*{Compiling Objects}
+\begin{itemize}
+	\item Objects contain a pointer to a dispatch vector (also called vtable) with pointers to method code. 
+	
+	\item DV layout of new method is appended to the class which is being extended.
+	
+	\item Multiple Inheritance approaches: 
+		\begin{compactitem}
+			\item Allow multiple DV tables (C++), choose which DV to use based on static types, casting requires runtime operations.
+			
+			\item Use a level of indirection: Map method identifiers to code pointers using a hash table, search up through the class hierarchy.
+			
+			\item Give up separate compilation: Use sparse dispatch vectors or binary decision trees.
+		\end{compactitem}
+	
+	\item Multiple Dispatch Vectors: Objects may have multiple entry points with individual DVs, casts change entry point of a variable
+\end{itemize}

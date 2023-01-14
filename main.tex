@@ -9,11 +9,42 @@
 
 \usepackage[dvipsnames]{xcolor}
 
+\usepackage{tikz}
+\usepackage{array}
+
+\usepackage{paralist}
+
+\usepackage{tabularx}
+\usepackage{ctable}
+
+\usepackage{listings}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=,
+  language=R,
+  aboveskip=0mm,
+  belowskip=0mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\fontsize{8pt}{9pt}\selectfont\ttfamily},
+  numbers=none,
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
 % Set page margins
 \geometry{top=.5cm, left=.5cm, right=.5cm, bottom=.5cm}
 
-% Set paragraph indentation
+% Set indentation
 \setlength{\parindent}{0pt}
+\setlength{\parskip}{0cm}
 
 % Set path for assets
 \graphicspath{{assets/}}
@@ -33,6 +64,13 @@
 \begin{document}
 \begin{multicols*}{3}
 
+\fontsize{9pt}{9pt}\selectfont
+
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+
 % _____ CONTENT __________________________________________________
 
 % main heading
@@ -41,21 +79,31 @@
     \small{by dcamenisch}
 \end{center}
 
-\input{chapters/introduction.tex}
+%\input{chapters/introduction.tex}
 
 The simplified compiler has the following structure:
-\begin{itemize}
+\begin{compactitem}
 	\item Lexical Analysis
 	\item Parsing
 	\item Intermediate Code Generation
 	\item Code Generation
-\end{itemize}
+\end{compactitem}
 
 \input{chapters/x86.tex}
 \input{chapters/intermediate.tex}
 \input{chapters/llvm.tex}
 \input{chapters/lexing.tex}
 \input{chapters/parsing.tex}
+\input{chapters/lambda_calculus.tex}
+\input{chapters/typing.tex}
+\input{chapters/compiling_objects.tex}
+\input{chapters/optimizations.tex}
+\input{chapters/gc.tex}
+
+
+\input{chapters/dispatch_vector.tex}
+\input{chapters/x86lite_frame.tex}
+\input{chapters/tikz.tex}
 
 \end{multicols*}
 \end{document}
