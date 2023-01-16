@@ -1,16 +1,12 @@
 \section*{LLVM (Low Level Virtual Machine)}
 
-\begin{itemize}
-	\item Storage Types: local variable \texttt{\%uid}, global variable \texttt{@gid}, abstract locations (stack-allocated with \texttt{alloca}), heap-allocated structures (\texttt{malloc}).
+Storage Types: local variable \texttt{\%uid}, global variable \texttt{@gid}, abstract locations (stack-allocated with \texttt{alloca}), heap-allocated structures (\texttt{malloc}).\medskip
 	
-	\item Each \texttt{\%uid} appears on the left-hand side of an assignment only once in the entire control flow graph (SSA).
+Each \texttt{\%uid} appears on the left-hand side of an assignment only once in the entire control flow graph (SSA).\medskip
 	
-	\item The entry block of the CFG does not have to be labeled, the last instruction of a block is called the terminator.
+The entry block of the CFG does not have to be labeled, the last instruction of a block is called the terminator.\medskip
 	
-	\item LLVM provides the \texttt{getelementptr} instruction to compute pointer values: Given a pointer and a path through the structured data pointed to by that pointer, GEP computes an address - analog of LEA.
-		$$\texttt{getelementptr <ty>* <ptrval> \{, <ty> <idx>\}* }$$
+LLVM provides the \texttt{getelementptr} instruction to compute pointer values: Given a pointer and a path through the structured data pointed to by that pointer, GEP computes an address - analog of LEA.
+$$\texttt{getelementptr <ty>* <ptrval> \{, <ty> <idx>\}* }$$
 		
-		GEP never dereferences the address it is calculating.
-	
-	
-\end{itemize}
+GEP never dereferences the address it is calculating.

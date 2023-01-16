@@ -24,7 +24,7 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 	
 	\item In CFGs ambiguity can (often) be removed by encoding precedence and associativity in the grammar.
 	
-	\item LL \& LR Parsing
+	\subsection*{LL \& LR Parsing}
 	\begin{itemize}
 		\item Top-down vs. Bottom-up
 		
@@ -47,14 +47,18 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 	
 		\item Predictive Parsing: Given an LL(1) grammar: For a given nonterminal, the lookahead symbol uniquely determines the production to apply - top-down parsing = predictive parsing - driven by a predictive parsing table: \textit{nonterminal x input token $\rightarrow$ production}
 		
+		\item The \textbf{first set} of a nonterminal contains all terminals that begin strings derivable from the nonterminal.
+		
+		\item The \textbf{follow set} of a nonterminal contains all terminals that can appear immediately to the right of the given nonterminal.
+		
 		\item Constructing the parsing table: 
 		Consider a given production $A \rightarrow \gamma$
 		
-		(Case 1) Construct the set of all input tokens that may appear \textbf{first} in strings that can be derived from $\gamma$ - Add the production $\rightarrow \gamma$ to the entry for each such token
+		(Case 1) Construct the first set - Add the production $\rightarrow \gamma$ to the entry for each token in the set.
 		
-		(Case 2) If $\gamma$ can derive $\epsilon$, then we construct the set of all input tokens that may \textbf{follow} the nonterminal $A$ in the grammar - Add the production $\rightarrow \gamma$ to the entry for each such token
+		(Case 2) If $\gamma$ can derive $\epsilon$, then we construct the follow set - Add the production $\rightarrow \gamma$ to the entry for each token in the set.
 		
-		\textbf{If there are two different productions for a given entry, the grammar is not LL(1)}
+		\textbf{If there are two different productions for a given entry, the grammar is not LL(1).}
 		
 		\item Bottom-up Parsing, LR(k) Parser: \textbf{L}eft-to-right scanning, \textbf{R}ightmost derivation, \textbf{k} lookahead symbols
 		
@@ -99,6 +103,8 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 		\item Run parser state though a DFA. DFA can be represented as a table of shape state $\times$ (terminals + nonterminals). Two types of actions: shift and go to state n, reduce using reduction $X \mapsto \gamma$
 		
 		\item An LR(0) machine only works if states with reduce actions have a single reduce action else we will encounter shift/reduce or reduce/reduce conflicts (use LR(1) grammar).
+		
+		\item For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
 	\end{itemize}
 \end{itemize}
 
