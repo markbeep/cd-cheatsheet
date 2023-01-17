@@ -1,25 +1,29 @@
 \section*{Garbage Collection}
-\begin{itemize}
-	\item Garbage: An object \texttt{x} is reachable iff a register contains a pointer to \texttt{x} or another reachable object \texttt{y} contains a pointer to \texttt{x}.
-	
-	\item Reachable objects can be found by starting from registers and following all pointers
 
-	\item Mark and Sweep
+An object \texttt{x} is reachable iff a register contains a pointer to \texttt{x} or another reachable object \texttt{y} contains a pointer to \texttt{x} (we also consider the stack as a source for pointers!). If an object is not reachable, we might want to consider it as garbage. \medskip
 	
-	When memory runs out, GC executes two phases: mark phase: trace reachable objects; sweep phase: collects garbage objects (extra bit reserved for memory management)
+Reachable objects can be found by starting from registers and following all pointers. \medskip
+
+\textbf{Mark and Sweep} \smallskip
 	
-	Pointer reversal can be used to allow auxiliary data to be stored in the objects.
+When memory runs out, GC executes two phases: mark phase: trace reachable objects; sweep phase: collects garbage objects (extra bit reserved for memory management)\medskip
 	
-	\item Stop and Copy
+One problem is that it only runs when we are out of memory - yet we need to keep track of our todo-list (not yet checked pointers). The solution to this is pointer reversal. We keep only a backward and forward pointer. The forward pointer points to the next object to be examined and the backward pointer to the one we just handled. Whenever we follow a pointer, we update that pointer to point to the back pointer, the back pointer points to the current object we followed to it. \medskip 
+
+Once we checked every object, we go in reverse. We let the backpointed-object point to where the forward pointer is while following its pointer with the back pointer and update the forward pointer to the current object. \medskip
+
+\textbf{Pros}: Objects stay in place, no need to update pointers. \textbf{Cons}: Fragmentation.\medskip
 	
-	Memory is organized into two areas: Old space (used for allocation), new space (use as a reserve for GC)
+\textbf{Stop and Copy} \smallskip
 	
-	When old space is full all reachable objects are moved, old and new are swapped. The new space is partitioned into copied and scanned, copied and empty regions.
+Memory is organized into two areas: Old space (used for allocation), new space (use as a reserve for GC). \medskip
 	
-	Copied and scanned contain objects whose pointer fields were followed and fixed, while the copied region contains the objects that where copied but whose pointer filed were not (yet) fixed.
+When old space is full all reachable objects are moved to the new space and the roles of the spaces are swapped. To avoid copying twice, a already copied object is replaced by a forwarding pointer to the new copy. \medskip
+
+To achieve this without extra space, we divide the new space in three regions: copied and scanned, a scan pointer followed by the copied region, and the alloc pointer followed by the empty region. We copy the objects pointed to by roots, then, as long as scan hasn't caught up to alloc: Find each object pointed to by the object at scan, if it's a forwarding pointer update our current pointer, if not, copy the pointed-to object to the new space, update alloc pointer, and update our current pointer. Increment the scan pointer. \medskip
+
+Despite having to update many pointers, stop and copy is generally the fastest GC technique, as allocation and collection is relatively cheap when there's lots of garbage. However, we need to tell objects and its contents apart, which is not possible in languages like C/C++. \medskip
+
+\textbf{Reference Counting }\smallskip
 	
-	\item Reference Counting
-	
-	Store number of references in the object itself, assignments modify that number. If the reference count is zero, remove the object. Cannot collect circular structures.
-	
-\end{itemize}
+Store number of references in the object itself, assignments modify that number. If the reference count is zero, free the object. Cannot collect circular structures and updating the reference count on each assignment is slow.

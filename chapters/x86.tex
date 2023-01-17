@@ -3,38 +3,40 @@
 x86lite memory consists of $2^{64}$ bytes numbered \texttt{0x00000000} through \texttt{0x0xffffffff}, split into 8-byte quadwords (has to be quadword-aligned). \medskip
 	
 The stack grows from high addresses to low addresses, \texttt{rsp} points to the top of the stack, \texttt{rbp} points to the bottom of the current stack frame. \medskip
+
+The stack sits at the top of memory space, at the bottom we have code and data followed by the heap.\medskip
 	
 Registers: \texttt{rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, rip, r08 - r15} \medskip
 	
-Flags: \texttt{OF} overflow, \texttt{SF} sign (1 = negative), \texttt{ZF} zero \medskip
+Flags: \texttt{OF} overflow/underflow, \texttt{SF} sign (1 = negative), \texttt{ZF} zero \medskip
 	
-Instructions: \texttt{SRC} before \texttt{DEST} (AT\&T syntax), prefix register with \% and immediate values with \$. \medskip
+Instructions: \texttt{INSTR} \texttt{SRC} \texttt{DEST} (AT\&T syntax), prefix register with \% and immediate values with \$. Note that \texttt{subq} is \texttt{DEST - SRC}.\medskip
 	
 Operands:
 \begin{compactitem}
 	\item \texttt{Imm}: 64-bit literal signed integer
 	\item \texttt{Lbl}: label representing a machine address
 	\item \texttt{Reg}: one of the registers, the value is its content
-	\item \texttt{Ind}: machine address [base:\texttt{reg}][index:\texttt{reg}][disp:\texttt{int32}] (base + index*8 + disp)
+	\item \texttt{Ind}: machine address
 \end{compactitem} \medskip
+
+\texttt{Ind} is  \texttt{offset(base, index)} is calculated \texttt{base + index * 8 + offset}.\medskip
 	
 x86 assembly is organized into labeled blocks, indicating code locations used by jumps, etc. Program begins execution at designated label (\texttt{main}).\medskip
 	
-Calling Conventions (SYSTEM V AMD64 ABI)
+Calling Conventions
 \begin{compactitem}
-	\item Setup Stack Frame: \newline
-		\texttt{pushq \%rbp} \newline 
-		\texttt{movq \%rsp, \%rbp}
+	\item Setup Stack Frame: \texttt{pushq \%rbp} \quad \texttt{movq \%rsp, \%rbp}
+	
+	\item Teardown: \texttt{popq \%rbp}
 		
 	\item Caller Save - freely usable by the called code.
+	
 	\item Callee Save - must be restored by the called code (\texttt{rbp, rsp, rbx, r12-15}).
 		
-	\item Arguments: \newline
-	1..6: \texttt{rdi, rsi, rdx, rcx, r08, r09} \newline
-	7+: on the stack (in right-to-left order) \newline
-	For $n > 6$, $(n-7) + 2) * 8 + \texttt{rbp}$
+	\item Arguments: In \texttt{rdi, rsi, rdx, rcx, r08, r09} and starting with $n = 7$ in $(n-7) + 2) * 8 + \texttt{rbp}$
 		
 	\item Return value in \texttt{rax}.
 
-	\item 128 byte "red zone" - scratch pad for the callee (beyond \texttt{rsp}).
+	\item 128 byte "red zone" - scratch pad for the callee (beyond \texttt{rsp}), this means a function can use up to 128 byte without allocationg a stack frame..
 \end{compactitem}
