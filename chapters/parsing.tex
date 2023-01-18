@@ -115,16 +115,15 @@ Instead of running the DFA from start for each step, we can store the state with
 
 An LR(0) machine only works if states with reduce actions have a single reduce action else we will encounter shift/reduce or reduce/reduce conflicts (use LR(1) grammar). \medskip
 
-In LR(1), each item is an LR(0) item plus a set of look-ahead symbols $A -\to \alpa . \beta, \; \mathcal L$. \medskip
+In LR(1), each item is an LR(0) item plus a set of look-ahead symbols $A \to \alpha . \beta, \; \mathcal L$.\medskip
 
-To form the LR(1) closure, we first do the same as for LR(0). Additionally for each item $C \to .\gamma$ we add due to a rule $A \to \beta . C \gamma, \; \mathcal L$, we compute its look-ahead set $\mathcal M$ including FIRST($\gamma$) and if $\gamma$ can derive $\epsilon$ also $\mathcal L$. \medskip
+To form the LR(1) closure, we first do the same as for LR(0). Additionally for each item $C \to . \gamma$ we add due to a rule $A \to \beta . C \gamma, \; \mathcal L$, we compute its look-ahead set $\mathcal M$ including FIRST($\gamma$) and if $\gamma$ can derive $\epsilon$ also $\mathcal L$. \medskip
 
 \begin{center}
 	\includegraphics[width=\linewidth]{assets/lr1.png}
 \end{center}
 		
 For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
-
 
 
 \tikzset{every picture/.style={line width=0.8pt}} %set default line width to 0.75pt 
