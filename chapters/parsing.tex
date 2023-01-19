@@ -5,12 +5,14 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 Parsing uses a more powerful tool than regex - context free grammars (CFG). \medskip
 
 Chomsky Hierarchy: 
-\begin{itemize}
+\begin{compactitem}
 	\item Regular - Productions have at most one nonterminal and it is at the start or end of the word
 	\item Context-Free (CFG) - LHS of productions only have a single nonterminal
-	\item Context-Sensitive - 
+	\item Context-Sensitive 
 	\item Recursively Enumerable
-\end{itemize}
+\end{compactitem}
+
+An example for a non CFG would be $a^n b^m c^n d^m$. This corresponds to methods having matching parameters.\medskip
 	
 A CFG consists of a set of terminals, a set of nonterminals, a start symbol and a set of productions. A production consists of a single nonterminal LHS and an arbitrary RHS. \medskip
 
@@ -109,6 +111,10 @@ Constructing the DFA:
 	\item Every state that ends in a dot is a reduce state.
 \end{itemize} 
 
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{assets/dfa.png}
+\end{center}
+
 The parser then runs the DFA.\medskip
 
 Instead of running the DFA from start for each step, we can store the state with each symbol on the stack - representing the DFA as a table of shape \texttt{state} $\times$ (\texttt{terminals} + \texttt{nonterminals}). \medskip
@@ -120,13 +126,13 @@ In LR(1), each item is an LR(0) item plus a set of look-ahead symbols $A \to \al
 To form the LR(1) closure, we first do the same as for LR(0). Additionally for each item $C \to . \gamma$ we add due to a rule $A \to \beta . C \gamma, \; \mathcal L$, we compute its look-ahead set $\mathcal M$ including FIRST($\gamma$) and if $\gamma$ can derive $\epsilon$ also $\mathcal L$. \medskip
 
 \begin{center}
-	\includegraphics[width=\linewidth]{assets/lr1.png}
+	\includegraphics[width=0.9\linewidth]{assets/lr1.png}
 \end{center}
 		
 For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
 
 
-\tikzset{every picture/.style={line width=0.8pt}} %set default line width to 0.75pt 
+\tikzset{every picture/.style={line width=0.7pt}} %set default line width to 0.75pt 
 
 \begin{center}
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1, xscale=1]

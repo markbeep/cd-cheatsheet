@@ -9,6 +9,19 @@ The stack sits at the top of memory space, at the bottom we have code and data f
 Registers: \texttt{rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, rip, r08 - r15} \medskip
 	
 Flags: \texttt{OF} overflow/underflow, \texttt{SF} sign (1 = negative), \texttt{ZF} zero \medskip
+
+Condition Codes:
+\begin{center}
+	\begin{tabular}{l l}
+		 \textbf{Code} & \textbf{Condition} \\
+		 e (equality) & \texttt{ZF} \\
+		 ne (not equals) & not \texttt{ZF} \\
+		 g (strictly greater) & not \texttt{ZF} and \texttt{SF} = \texttt{OF} \\
+		 l (strictly less) & \texttt{SF} $\neq$ \texttt{OF} \\
+		 ge (greater or equal) & \texttt{SF} = \texttt{OF} \\
+		 le (less or equal) & \texttt{SF} $\neq$ \texttt{OF} or \texttt{ZF} \\
+	\end{tabular}
+\end{center}
 	
 Instructions: \texttt{INSTR} \texttt{SRC} \texttt{DEST} (AT\&T syntax), prefix register with \% and immediate values with \$. Note that \texttt{subq} is \texttt{DEST - SRC}.\medskip
 	
@@ -21,6 +34,8 @@ Operands:
 \end{compactitem} \medskip
 
 \texttt{Ind} is  \texttt{offset(base, index)} is calculated \texttt{base + index * 8 + offset}.\medskip
+
+Thus, \texttt{\%rax} refers tot he contents of the register, while \texttt{(\%rax)} refers to either the memory address or the contents of the memory address, depending on whether its used as location or value.\medskip
 	
 x86 assembly is organized into labeled blocks, indicating code locations used by jumps, etc. Program begins execution at designated label (\texttt{main}).\medskip
 	
