@@ -1,5 +1,7 @@
 name: Build LaTeX document
+
 on: [push]
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -10,8 +12,10 @@ jobs:
         uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: Build PDF
-          committer_name: LaTeX PDF Builder
-          add: main.pdf
+      - name: Commit main.pdf
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add main.pdf
+          git commit -m "Built new PDF"
+          git push
