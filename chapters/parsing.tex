@@ -58,6 +58,12 @@ Becomes:\smallskip
 	S` -> a_1 S` | ... | a_n S` | epsilon$
 \end{lstlisting}\medskip
 
+
+%------------
+\columnbreak
+%------------
+
+
 To actually use these grammars, we need to translate them into a \textbf{parsing table}: \medskip
 
 For a given production $A \to \gamma$:
@@ -70,7 +76,7 @@ For a given production $A \to \gamma$:
 \begin{center}
 	\includegraphics[width=\linewidth]{assets/ll1.png}
 \end{center}
-
+\vspace{-10pt}
 This can be extended to LL($k$) grammars by generating a bigger table.
 
 
@@ -114,7 +120,7 @@ Constructing the DFA:
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/dfa.png}
 \end{center}
-
+\vspace{-10pt}
 The parser then runs the DFA.\medskip
 
 Instead of running the DFA from start for each step, we can store the state with each symbol on the stack - representing the DFA as a table of shape \texttt{state} $\times$ (\texttt{terminals} + \texttt{nonterminals}). \medskip
@@ -125,39 +131,13 @@ In LR(1), each item is an LR(0) item plus a set of look-ahead symbols $A \to \al
 
 To form the LR(1) closure, we first do the same as for LR(0). Additionally for each item $C \to . \gamma$ we add due to a rule $A \to \beta . C \gamma, \; \mathcal L$, we compute its look-ahead set $\mathcal M$ including FIRST($\gamma$) and if $\gamma$ can derive $\epsilon$ also $\mathcal L$. \medskip
 
+\vspace{-15pt}
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/lr1.png}
 \end{center}
-		
+\vspace{-10pt}
 For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
 
-
-\tikzset{every picture/.style={line width=0.7pt}} %set default line width to 0.75pt 
-
 \begin{center}
-\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1, xscale=1]
-%uncomment if require: \path (0,719); %set diagram left start at 0, and has height of 719
-
-%Shape: Ellipse [id:dp342446435028968] 
-\draw   (505,130) .. controls (505,118.95) and (520.67,110) .. (540,110) .. controls (559.33,110) and (575,118.95) .. (575,130) .. controls (575,141.05) and (559.33,150) .. (540,150) .. controls (520.67,150) and (505,141.05) .. (505,130) -- cycle ;
-%Shape: Ellipse [id:dp31528986086353894] 
-\draw   (476.63,122.04) .. controls (476.63,102.73) and (504.02,87.07) .. (537.81,87.07) .. controls (571.61,87.07) and (599,102.73) .. (599,122.04) .. controls (599,141.35) and (571.61,157) .. (537.81,157) .. controls (504.02,157) and (476.63,141.35) .. (476.63,122.04) -- cycle ;
-%Shape: Ellipse [id:dp8349221817367837] 
-\draw   (450.47,107.09) .. controls (450.47,79.52) and (489.57,57.18) .. (537.81,57.18) .. controls (586.05,57.18) and (625.16,79.52) .. (625.16,107.09) .. controls (625.16,134.65) and (586.05,157) .. (537.81,157) .. controls (489.57,157) and (450.47,134.65) .. (450.47,107.09) -- cycle ;
-%Shape: Ellipse [id:dp22985392220585588] 
-\draw   (425.81,93) .. controls (425.81,57.65) and (475.96,29) .. (537.81,29) .. controls (599.67,29) and (649.81,57.65) .. (649.81,93) .. controls (649.81,128.35) and (599.67,157) .. (537.81,157) .. controls (475.96,157) and (425.81,128.35) .. (425.81,93) -- cycle ;
-%Shape: Ellipse [id:dp012648097779113021] 
-\draw  [fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=0.7 ] (492.16,41.05) .. controls (503.2,40.76) and (512.77,64.01) .. (513.53,92.99) .. controls (514.3,121.97) and (505.96,145.7) .. (494.92,145.99) .. controls (483.88,146.28) and (474.31,123.02) .. (473.55,94.05) .. controls (472.78,65.07) and (481.11,41.34) .. (492.16,41.05) -- cycle ;
-
-% Text Node
-\draw (520,123) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(0)};
-% Text Node
-\draw (523,94) node [anchor=north west][inner sep=0.75pt]   [align=left] {SLR};
-% Text Node
-\draw (514,66) node [anchor=north west][inner sep=0.75pt]   [align=left] {LALR(1)};
-% Text Node
-\draw (520,36) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(1)};
-% Text Node
-\draw (477, 84) node [anchor=north west][inner sep=0.75pt]   [align=left] {LL(1)};
-\end{tikzpicture}
+	\includegraphics[width=0.5\linewidth]{language.png}
 \end{center}
