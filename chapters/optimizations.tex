@@ -42,7 +42,7 @@ Almost every dataflow analysis is a variation of the following algorithm. \small
 
 \textbf{Backward}: swap \texttt{in} and \texttt{out} and \texttt{pred} with \texttt{succ}.\medskip
 
-\textbf{May}: swap $\top$ with $\bot$ or $\emptyset$ and replace $\cup$ with $\cap$. \medskip
+\textbf{May}: swap $\top$ with $\bot$ or $\emptyset$ and replace $\cap$ with $\cup$.\medskip
 
 For each dataflow analysis we only need to define the set \texttt{gen}, \texttt{kill} as well as the domain of dataflow values $\mathcal L$ and a combining operator $\cup$ or $\cap$.\medskip
 
@@ -62,14 +62,19 @@ Used for common subexpression elimination. \texttt{in / out} are the set of node
 
 \textbf{Very Busy} (Backward, Must)\medskip
 
-An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined. It is used for hoisting expressions.\medskip
+An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined. It is used for hoisting expressions.\smallskip
+
+\texttt{gen[B]} = \{expr; expr a op b is evaluated in B, neither a nor b are subsequently redefinded in B \}\smallskip
+
+\texttt{kill[B]} = \{expr; a or b of expr a op b are defined in B and a op b is not subsequently evaluated in B\} \medskip
 
 \textbf{Dominators} (Forward, Must)\medskip
 
 Define \texttt{dom[n]} as the set of all nodes that dominate \texttt{n}, i.e. \texttt{dom[n] = out[n]}, \texttt{gen} is the singelton set of the node itself, \texttt{kill} is the empty set.\medskip
 
-The iterative solution computes the ideal meet-over-path solution if the flow function distributes over $\cap$. Most of the problems that express properties on how the program computes are distributive and compute the MOP solution, analyses of what the program computes do not. Our analyses also always terminate, as the flow function (\texttt{out[n] = ...}) is monotonic.
+The iterative solution computes the ideal meet-over-path solution if the flow function distributes over $\cap$. Most of the problems that express properties on how the program computes are distributive and compute the MOP solution, analyses of what the program computes do not (e.g. constant propagation). Our analyses also always terminate, as the flow function (\texttt{out[n] = ...}) is monotonic.\medskip
 
+\textbf{Soundness} is defined as an under approximation of the set of variables.
 
 
 \subsection*{Register Allocation}
@@ -102,7 +107,7 @@ Precolored Nodes: Certain variables must be pre-assigned to registers (\texttt{c
 
 \subsection*{Dominator Trees}
 
-We want to identify loops in a CFG. For that we use domination. $A$ dominates $B$ ($A$ dom $B$), if the only way to reach $B$ from start node is via $A$. This relation is transitive, reflexive and anti-symmetric. This can be computed as forward must dataflow analysis.\medskip
+We want to identify loops in a CFG. For that we use domination. $A$ dominates $B$ ($A$ dom $B$), if the only way to reach $B$ from start node is via $A$. This relation is transitive, reflexive and anti-symmetric. This can be computed as forward must dataflow analysis. $A$ strictly dominate $B$, if $A \neq B$ and $A$ dom $B$.\medskip
 
 The Hasse diagram of the dominates relation is called the dominator tree.\medskip
 
@@ -110,7 +115,7 @@ A loop is a set of nodes in the CFG, with a distinguished entry, the header, and
 
 A loop contains at least 1 back edge (back edge = target dominates the source).\medskip
 
-The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$.
+The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops.
 
 
 \subsection*{Single Static Assignment (SSA)}

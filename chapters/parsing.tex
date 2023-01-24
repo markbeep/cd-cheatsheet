@@ -17,14 +17,14 @@ An example for a non CFG would be $a^n b^m c^n d^m$. This corresponds to methods
 A CFG consists of a set of terminals, a set of nonterminals, a start symbol and a set of productions. A production consists of a single nonterminal LHS and an arbitrary RHS. \medskip
 
 Derivation Orders - Productions can be applied in any order, however they will all lead to the same parse tree. There are two standard orders:
-\begin{itemize}
+\begin{compactitem}
 	\item Leftmost derivation: Find the left-most nonterminal and apply a production to it
 	\item Rightmost derivation: Find the right-most nonterminal and apply a production there
-\end{itemize}
+\end{compactitem}
 
 A grammar is \textbf{ambiguous} if there are multiple derivation trees for the same word. This can be a problem for associative operators. \medskip
 	
-In CFGs ambiguity can (often) be removed by adding nonterminals and allowing recursion only on one side. For example:\smallskip
+In CFGs ambiguity can (often) be removed by adding nonterminals and allowing recursion only on one side. For example, we want $+$ to be left associative, $*$ right associative and $*$ has the higher precedence:\smallskip
 
 \begin{lstlisting}
 	S -> S + S | S * S | (S) | n
@@ -34,7 +34,7 @@ Becomes:\smallskip
 
 \begin{lstlisting}
 	S_0 -> S_0 + S_1 | S_1
-	S_1 -> S_2 * S_1
+	S_1 -> S_2 * S_1 | S_2
 	S_2 -> n | (S_0)
 \end{lstlisting}
 
@@ -61,11 +61,11 @@ Becomes:\smallskip
 To actually use these grammars, we need to translate them into a \textbf{parsing table}: \medskip
 
 For a given production $A \to \gamma$:
-\begin{itemize}
+\begin{compactitem}
 	\item Construct the \textbf{first set} of $A$, this set contains all terminals that begin strings derivable from the nonterminal. For each nonterminal of the first set, add the corresponding production to the table.
 	
 	\item Construct the \textbf{follow set} of $A$, this set contains all terminals that can appear immediately to the right of the given nonterminal. If $\epsilon$ is derivable by the production, add the corresponding production to the table.
-\end{itemize}
+\end{compactitem}
 
 \begin{center}
 	\includegraphics[width=\linewidth]{assets/ll1.png}
@@ -79,20 +79,20 @@ This can be extended to LL($k$) grammars by generating a bigger table.
 LR grammars are more expressive than LL grammars. They can handle left-recursive and right-recursive grammars. However error reporting is poorer. \medskip
 
 Bottom-up parsing is a sequence of \textbf{shift} and \textbf{reduce} operations:
-\begin{itemize}
+\begin{compactitem}
 	\item Shift: Move look-ahead token to stack.
 	
 	\item Reduce: Replace symbols $\gamma$ at the top of the stack with nonterminal $X$ such that $X \to \gamma$ is a production. Pop $\gamma$, push $X$.
-\end{itemize}
+\end{compactitem}
 
 The parser state is made up of a stack of nonterminals and terminals, as well as the so far unconsumed input.\medskip
 			
 Action Selection Problem:
-\begin{itemize}
+\begin{compactitem}
 	\item Given a stack $\sigma$ and a lookahead symbol $b$, should the parser \textbf{shift} $b$ onto the stack (new stack is $\sigma b$) , or \textbf{reduce} a production $X \mapsto \gamma$, assuming that $\sigma = \alpha \gamma$?
 	
 	\item Sometimes the parser can reduce, but should not, sometimes the stack can be reduced in different ways.
-\end{itemize}
+\end{compactitem}
 
 We want to decide based on a prefix $\alpha$ of the stack and the look-ahead. \medskip
 		
@@ -101,7 +101,7 @@ In LR(0) we have states: items to track progress on possible upcoming reductions
 The idea is that the stuff before the "." is already on the stack and the rest is what might be seen next. \medskip
 		
 Constructing the DFA:
-\begin{itemize}
+\begin{compactitem}
 	\item Add new production: $S' \to S\$$, this is the start of the DFA.
 						
 	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached.
@@ -109,7 +109,7 @@ Constructing the DFA:
 	\item Add transitions for each possible next (non-)terminal. Shift the dot by one in each of those states.
 	
 	\item Every state that ends in a dot is a reduce state.
-\end{itemize} 
+\end{compactitem} 
 
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/dfa.png}
