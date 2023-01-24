@@ -1,22 +1,22 @@
 \section*{Optimizations}
- 
+
 There are different kinds of optimization: Power, Space, Time.
 
 \begin{compactitem}
 	\item \textbf{Constant Folding}: If operands are statically known, compute value at compile-time. More general algebraic simplification: Use mathematical identities.
-	
+
 	\item \textbf{Constant Propagation}: If $x$ is a constant replace its uses by the constant.
-	
+
 	\item \textbf{Copy Propagation}: For $x = y$ replace uses of $x$ with $y$
-	
+
 	\item \textbf{Dead Code Elimination}: If side-effect free code can never be observed, safe to eliminate it.
-	
+
 	\item \textbf{Inlining}: Replace a function call with the body of the function (arguments are rewritten to local variables).
-	
+
 	\item \textbf{Code Specialization}: Create Specialized versions of a function that is called form different places with different arguments.
-	
+
 	\item \textbf{Common Subexpression Elimination}: It is the opposite of inlining, fold redundant computations together.
-	
+
 	\item \textbf{Loop Optimizations}
 	\begin{compactitem}
 		\item Hot spots often occur in loops (esp. inner loops)
@@ -38,17 +38,18 @@ Almost every dataflow analysis is a variation of the following algorithm.\smalls
 		for all n
 			in[n] = intersect out[n`] for all n` in pred[n]
 			out[n] = gen[n] union (in[n] \ kill[n])	
-\end{lstlisting}\medskip
+\end{lstlisting}
+\textbf{Backward}: swap \texttt{in} and \texttt{out} and \texttt{pred} with \texttt{succ}.
 
-\textbf{Backward}: swap \texttt{in} and \texttt{out} and \texttt{pred} with \texttt{succ}.\medskip
-
-\textbf{May}: swap $\top$ with $\bot$ or $\emptyset$ and replace $\cap$ with $\cup$.\medskip
+\textbf{May}: swap $\top$ with $\bot$ or $\emptyset$ and replace \textcolor{blue}{\texttt{intersect}} with \textcolor{blue}{\texttt{union}}.\medskip
 
 For each dataflow analysis we only need to define the set \texttt{gen}, \texttt{kill} as well as the domain of dataflow values $\mathcal L$ and a combining operator $\cup$ or $\cap$.\medskip
 
 \textbf{Liveness} (Backward, May)\medskip
 
-We can use the same registers for multiple \texttt{\%uids} if they are not alive at the same time. We define \texttt{gen[s]} as all the variables used and \texttt{kill[s]} as all the variables defined by statement $s$. $\mathcal L$ corresponds to the variables and the combination operator to the set union.\medskip
+We can use the same registers for multiple \texttt{\%uids} if they are not alive at the same time
+(\textbf{live[n]} = uids used before end/reassign).
+We define \texttt{gen[s]} as all the variables used (RHS) and \texttt{kill[s]} as all the variables defined by statement $s$ (LHS). $\mathcal L$ corresponds to the variables and the combination operator to the set union.\medskip
 
 It holds: in[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n$] $\backslash$ kill[$n$] and out[$n$] $\supseteq$ in[$n'$] if $n' \in $ succ[$n$].\medskip
 
@@ -62,7 +63,8 @@ Used for common subexpression elimination. \texttt{in / out} are the set of node
 
 \textbf{Very Busy} (Backward, Must)\medskip
 
-An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined. It is used for hoisting expressions.\smallskip
+An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined.
+It is used for hoisting expressions. \textbf{in/out/gen allow for expressions (x+y, \ldots)} \medskip
 
 \texttt{gen[B]} = \{expr; expr a op b is evaluated in B, neither a nor b are subsequently redefinded in B \}\smallskip
 
@@ -82,12 +84,12 @@ The iterative solution computes the ideal meet-over-path solution if the flow fu
 \textbf{Linear-Scan Register Allocation}\medskip
 
 Compute liveness information and then scan through the program, for each instruction try to find an available register, else spill it on the stack.\medskip
-	
+
 \textbf{Graph Coloring}\medskip
 
 Compute liveness information for each temp, create an inference graph (nodes are temps and there is an edge if they are alive at the same time), try to color the graph.\medskip
-	
-\textbf{Kempe's Algorithm}: 
+
+\textbf{Kempe's Algorithm}:
 \begin{compactitem}
 	\item Find a node with degree $< k$ and cut it out of the graph
 	\item Recursively $k$-color the remaining subgraph
@@ -100,7 +102,7 @@ This can be improve by adding \texttt{move} related edges (temps used in a move 
 \textbf{Brigg}'s strategy is to only coalesce if the resulting node has fewer than $k$ neighbors with degree $\geq k$. \medskip
 
 \textbf{George}'s strategs is to only coalesce if for every neighbor $t$ of one of the coalescing nodes $x$, $t$ also interferes with the other coalescing node or $t$ has degree $< k$.\medskip
-	
+
 Precolored Nodes: Certain variables must be pre-assigned to registers (\texttt{call}, \texttt{imul}, caller-save registers)
 
 
@@ -111,9 +113,11 @@ We want to identify loops in a CFG. For that we use domination. $A$ dominates $B
 
 The Hasse diagram of the dominates relation is called the dominator tree.\medskip
 
-A loop is a set of nodes in the CFG, with a distinguished entry, the header, and exit nodes. It is a strongly connected component (SSC), every node is reachable from every other node and vice versa.\medskip
+A loop is a set of nodes in the CFG, with a distinguished entry, the header, and exit nodes.
+It is a strongly connected component (SSC), every node is reachable from every other node.
+For a back edge $n \rightarrow h$, $h$ is the header. Loops with the same header can be merged (i.e $\{A,B,C\}, \{A,D\}$ can be merged to $\{A,B,C,D\}$). \medskip
 
-A loop contains at least 1 back edge (back edge = target dominates the source).\medskip
+A \textbf{loop} contains at least 1 back edge (\textbf{back edge} = target dominates the source).\medskip
 
 The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops.
 

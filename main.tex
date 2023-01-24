@@ -20,6 +20,12 @@
 \usepackage{ctable}
 
 \usepackage{listings}
+\usepackage{titlesec}
+
+% reduces section spacing
+\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -66,35 +72,35 @@
 \begin{document}
 \begin{multicols*}{3}
 
-\fontsize{8pt}{8pt}\selectfont
+  \fontsize{8pt}{8pt}\selectfont
 
-\setlength{\abovedisplayskip}{2pt}
-\setlength{\belowdisplayskip}{0pt}
-\setlength{\abovedisplayshortskip}{0pt}
-\setlength{\belowdisplayshortskip}{0pt}
+  \setlength{\abovedisplayskip}{2pt}
+  \setlength{\belowdisplayskip}{0pt}
+  \setlength{\abovedisplayshortskip}{0pt}
+  \setlength{\belowdisplayshortskip}{0pt}
 
-% _____ CONTENT __________________________________________________
+  % _____ CONTENT __________________________________________________
 
-% main heading
-\begin{center}
-	\Large{\textbf{Compiler Design}} \\
+  % main heading
+  \begin{center}
+    \Large{\textbf{Compiler Design}} \\
     \small{by dcamenisch}
-\end{center}
+  \end{center}
 
-%\input{chapters/introduction.tex}
+  %\input{chapters/introduction.tex}
 
-\input{chapters/compiler.tex}
-\input{chapters/x86.tex}
-\input{chapters/intermediate.tex}
-\input{chapters/llvm.tex}
-\input{chapters/lexing.tex}
-\input{chapters/parsing.tex}
-\input{chapters/lambda_calculus.tex}
-\input{chapters/typing.tex}
-\input{chapters/compiling_objects.tex}
-\input{chapters/optimizations.tex}
-\input{chapters/gc.tex}
-\input{chapters/exercises.tex}
+  \input{chapters/compiler.tex}
+  \input{chapters/x86.tex}
+  \input{chapters/intermediate.tex}
+  \input{chapters/llvm.tex}
+  \input{chapters/lexing.tex}
+  \input{chapters/parsing.tex}
+  \input{chapters/lambda_calculus.tex}
+  \input{chapters/typing.tex}
+  \input{chapters/compiling_objects.tex}
+  \input{chapters/optimizations.tex}
+  \input{chapters/gc.tex}
+  \input{chapters/exercises.tex}
 
 \end{multicols*}
 \end{document}

@@ -4,16 +4,16 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 
 Parsing uses a more powerful tool than regex - context free grammars (CFG). \medskip
 
-Chomsky Hierarchy: 
+Chomsky Hierarchy:
 \begin{compactitem}
 	\item Regular - Productions have at most one nonterminal and it is at the start or end of the word
 	\item Context-Free (CFG) - LHS of productions only have a single nonterminal
-	\item Context-Sensitive 
+	\item Context-Sensitive
 	\item Recursively Enumerable
 \end{compactitem}
 
 An example for a non CFG would be $a^n b^m c^n d^m$. This corresponds to methods having matching parameters.\medskip
-	
+
 A CFG consists of a set of terminals, a set of nonterminals, a start symbol and a set of productions. A production consists of a single nonterminal LHS and an arbitrary RHS. \medskip
 
 Derivation Orders - Productions can be applied in any order, however they will all lead to the same parse tree. There are two standard orders:
@@ -23,7 +23,7 @@ Derivation Orders - Productions can be applied in any order, however they will a
 \end{compactitem}
 
 A grammar is \textbf{ambiguous} if there are multiple derivation trees for the same word. This can be a problem for associative operators. \medskip
-	
+
 In CFGs ambiguity can (often) be removed by adding nonterminals and allowing recursion only on one side. For example, we want $+$ to be left associative, $*$ right associative and $*$ has the higher precedence:\smallskip
 
 \begin{lstlisting}
@@ -42,9 +42,9 @@ Becomes:\smallskip
 \subsection*{LL Grammars and Top-Down Parsing}
 
 When parsing a grammar \textbf{top-down}, we can encounter the problem of multiple productions being possible. \medskip
-		
+
 LL(1) means \textbf{L}eft-to-right scanning, \textbf{L}eft-most derivation, \textbf{1} lookahead symbol. \medskip
-		
+
 Left-factoring a grammar can make it LL(1): If there is a common prefix we can add a new non-terminal at the decision point. We also need to eliminate left-recursion:\smallskip
 
 \begin{lstlisting}
@@ -69,7 +69,7 @@ To actually use these grammars, we need to translate them into a \textbf{parsing
 For a given production $A \to \gamma$:
 \begin{compactitem}
 	\item Construct the \textbf{first set} of $A$, this set contains all terminals that begin strings derivable from the nonterminal. For each nonterminal of the first set, add the corresponding production to the table.
-	
+
 	\item Construct the \textbf{follow set} of $A$, this set contains all terminals that can appear immediately to the right of the given nonterminal. If $\epsilon$ is derivable by the production, add the corresponding production to the table.
 \end{compactitem}
 
@@ -87,35 +87,35 @@ LR grammars are more expressive than LL grammars. They can handle left-recursive
 Bottom-up parsing is a sequence of \textbf{shift} and \textbf{reduce} operations:
 \begin{compactitem}
 	\item Shift: Move look-ahead token to stack.
-	
+
 	\item Reduce: Replace symbols $\gamma$ at the top of the stack with nonterminal $X$ such that $X \to \gamma$ is a production. Pop $\gamma$, push $X$.
 \end{compactitem}
 
 The parser state is made up of a stack of nonterminals and terminals, as well as the so far unconsumed input.\medskip
-			
+
 Action Selection Problem:
 \begin{compactitem}
 	\item Given a stack $\sigma$ and a lookahead symbol $b$, should the parser \textbf{shift} $b$ onto the stack (new stack is $\sigma b$) , or \textbf{reduce} a production $X \mapsto \gamma$, assuming that $\sigma = \alpha \gamma$?
-	
+
 	\item Sometimes the parser can reduce, but should not, sometimes the stack can be reduced in different ways.
 \end{compactitem}
 
 We want to decide based on a prefix $\alpha$ of the stack and the look-ahead. \medskip
-		
+
 In LR(0) we have states: items to track progress on possible upcoming reductions. An item is a production with an extra separator "." in the RHS. \medskip
-		
+
 The idea is that the stuff before the "." is already on the stack and the rest is what might be seen next. \medskip
-		
+
 Constructing the DFA:
 \begin{compactitem}
 	\item Add new production: $S' \to S\$$, this is the start of the DFA.
-						
+
 	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached.
-			
+
 	\item Add transitions for each possible next (non-)terminal. Shift the dot by one in each of those states.
-	
+
 	\item Every state that ends in a dot is a reduce state.
-\end{compactitem} 
+\end{compactitem}
 
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/dfa.png}
