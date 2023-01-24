@@ -3,7 +3,6 @@
 \hrulefill
 
 \textbf{Ex.} In parsing, ...
-
 \begin{compactitem}
 	\item[$\square$] LL(1) parsers are more powerful than LR(0) parsers.
 	\item[$\boxtimes$] LR(1) parsers are more powerful than LL(1) parsers.
@@ -14,7 +13,6 @@
 \hrulefill
 
 \textbf{Ex.} For context free grammars, ...
-
 \begin{compactitem}
 	\item[$\boxtimes$] LR parsers can handle left-recursive grammars.
 	\item[$\boxtimes$] LR parsers can handle right-recursive grammars.
@@ -24,7 +22,22 @@
 \hrulefill
 
 \textbf{Ex.} A left-recursive grammar cannot be implemented by an LL(k) parser for any k.
+\begin{compactitem}
+	\item[$\boxtimes$] True
+	\item[$\square$] False
+\end{compactitem}
 
+\hrulefill
+
+\textbf{Ex.} LR(k) grammars cannot be right recursive.
+\begin{compactitem}
+	\item[$\square$] True
+	\item[$\boxtimes$] False
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} There is no such thing as a shift/shift conflict for a LR parser.
 \begin{compactitem}
 	\item[$\boxtimes$] True
 	\item[$\square$] False
@@ -33,7 +46,6 @@
 \hrulefill
 
 \textbf{Ex.} Calling conventions, ...
-
 \begin{compactitem}
 	\item[$\boxtimes$] specify where arguments and return values should be stored.
 	\item[$\square$] specify the starting address of stack and heap.
@@ -43,7 +55,6 @@
 \hrulefill
 
 \textbf{Ex.} Nominal subtyping, ...
-
 \begin{compactitem} 
 	\item[$\boxtimes$] requires us to explicitly declare subtyping relationships.
 	\item[$\square$] is used by OAT for struct subtyping.
@@ -54,7 +65,6 @@
 \hrulefill
 
 \textbf{Ex.} A basic block, ...
-
 \begin{compactitem}
 	\item[$\boxtimes$] starts with a label.
 	\item[$\square$] can contain more than one control-flow instruction.
