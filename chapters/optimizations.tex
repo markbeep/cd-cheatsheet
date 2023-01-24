@@ -36,7 +36,7 @@ Almost every dataflow analysis is a variation of the following algorithm. \small
 	for all n, in[n] = T, out[n] = T
 	repeat until no change in 'in' or 'out'
 		for all n
-			in[n] = intersection of out[n`] for all n` in pred[n]
+			in[n] = intersect out[n`] for all n` in pred[n]
 			out[n] = gen[n] union (in[n] \ kill[n])	
 \end{lstlisting}\medskip
 
