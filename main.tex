@@ -14,6 +14,8 @@
 
 \usepackage{paralist}
 
+\usepackage[compact]{titlesec}
+
 \usepackage{tabularx}
 \usepackage{ctable}
 
@@ -70,7 +72,7 @@
 \begin{document}
 \begin{multicols*}{3}
 
-  \fontsize{9pt}{9pt}\selectfont
+  \fontsize{8pt}{8pt}\selectfont
 
   \setlength{\abovedisplayskip}{2pt}
   \setlength{\belowdisplayskip}{0pt}
@@ -98,12 +100,7 @@
   \input{chapters/compiling_objects.tex}
   \input{chapters/optimizations.tex}
   \input{chapters/gc.tex}
-
-  % gets these cool diagrams next to each other
-  \begin{multicols*}{2}
-    \input{chapters/dispatch_vector.tex}
-    \input{chapters/x86lite_frame.tex}
-  \end{multicols*}
+  \input{chapters/exercises.tex}
 
 \end{multicols*}
 \end{document}

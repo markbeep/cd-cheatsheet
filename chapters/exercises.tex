@@ -1,0 +1,84 @@
+\section*{Exercises}
+
+\hrulefill
+
+\textbf{Ex.} In parsing, ...
+
+\begin{compactitem}
+	\item[$\square$] LL(1) parsers are more powerful than LR(0) parsers.
+	\item[$\boxtimes$] LR(1) parsers are more powerful than LL(1) parsers.
+	\item[$\boxtimes$] LALR(1) may introduce new reduce/reduce conflicts compared to LR(1) when parsing the same grammar.
+	\item[$\square$] LALR(1) may introduce new shift/reduce conflicts compared to LR(1) when parsing the same grammar.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} For context free grammars, ...
+
+\begin{compactitem}
+	\item[$\boxtimes$] LR parsers can handle left-recursive grammars.
+	\item[$\boxtimes$] LR parsers can handle right-recursive grammars.
+	\item[$\square$] LL parsers can handle left-recursive grammars.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} A left-recursive grammar cannot be implemented by an LL(k) parser for any k.
+
+\begin{compactitem}
+	\item[$\boxtimes$] True
+	\item[$\square$] False
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Calling conventions, ...
+
+\begin{compactitem}
+	\item[$\boxtimes$] specify where arguments and return values should be stored.
+	\item[$\square$] specify the starting address of stack and heap.
+	\item[$\boxtimes$] can be disregarded by the compiler for functions that are not exposed to external callers as an optimization.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Nominal subtyping, ...
+
+\begin{compactitem} 
+	\item[$\boxtimes$] requires us to explicitly declare subtyping relationships.
+	\item[$\square$] is used by OAT for struct subtyping.
+	\item[$\square$] is a subcategory of structural subtyping.
+	\item[$\boxtimes$] is used by Java for subtyping.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} A basic block, ...
+
+\begin{compactitem}
+	\item[$\boxtimes$] starts with a label.
+	\item[$\square$] can contain more than one control-flow instruction.
+	\item[$\boxtimes$] is always executed starting from the basic block's first instruction.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Consider the following dominance frontier DF of a graph:
+DF[$ U $] = $\{ Y \}$,
+DF[$ V $] = $\{ Z, W, Y \}$,
+DF[$ W $] = $\{ V, Y \}$,
+DF[$ X $] = $\{  \}$,
+DF[$ Y $] = $\{ V \}$,
+DF[$ Z $] = $\{  \}$.
+There is a variable $x$ that is modified at nodes $N = \{X, Y, Z\}$. Determine all nodes
+where $\phi$ functions for $x$ have to be inserted, i.e., the join points for $N$ with respect to $x$.
+Determine the least fixed point of the sequence:
+$$J[N] = \text{DF}_k[N] \text{ where } \text{DF}_0[N] = \text{DF}[N]; \text{DF}_{i+1}[N] = \text{DF}[\text{DF}_i[N] \cup \{N\}]$$\smallskip
+
+$\text{DF}_0[\{X, Y, Z\}] = \{V\}$, 
+
+$\text{DF}_1[\{X, Y, Z, V\}] = \{V, W, Z, Y\}$, 
+
+$\text{DF}_1[\{V, W, Z, Y\}] = \{V, W, Z, Y\} = J[\{X, Y, Z\}]$
+
+\hrulefill

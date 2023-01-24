@@ -26,4 +26,6 @@ Definitely non-null reference types: \texttt{R} (named) mutable structs with wid
 	
 Possibly-null reference types: \texttt{R?} \medskip
 	
-Subtyping: \texttt{R} $<:$ \texttt{R?}
+Subtyping: \texttt{R} $<:$ \texttt{R?}\medskip
+
+Note that \texttt{string[]} is not a subtype of \texttt{string?[]} but \texttt{string[] $<:$ string[]?} holds.
