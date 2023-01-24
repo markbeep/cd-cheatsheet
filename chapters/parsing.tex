@@ -55,7 +55,7 @@ Becomes:\smallskip
 
 \begin{lstlisting}		
 	S -> b_1 S` | ... | b_m S`		
-	S` -> a_1 S` | ... | a_n S` | epsilon$
+	S` -> a_1 S` | ... | a_n S` | $\epsilon$
 \end{lstlisting}\medskip
 
 
@@ -77,6 +77,10 @@ For a given production $A \to \gamma$:
 	\includegraphics[width=\linewidth]{assets/ll1.png}
 \end{center}
 \vspace{-10pt}
+Intuitively, if we're at nonterminal (\texttt{T, S, S'}) and at terminal $\gamma$ (\texttt{+, \$}), then what productions allow us to parse $\gamma$.
+
+\textbf{Is it an LL(1) grammar?} No, if there's a cell with multiple options.
+
 This can be extended to LL($k$) grammars by generating a bigger table.
 
 
@@ -110,7 +114,7 @@ Constructing the DFA:
 \begin{compactitem}
 	\item Add new production: $S' \to S\$$, this is the start of the DFA.
 
-	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached.
+	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached (duplicates allowed).
 
 	\item Add transitions for each possible next (non-)terminal. Shift the dot by one in each of those states.
 
@@ -138,6 +142,7 @@ To form the LR(1) closure, we first do the same as for LR(0). Additionally for e
 \vspace{-10pt}
 For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
 
-\begin{center}
-	\includegraphics[width=0.5\linewidth]{language.png}
-\end{center}
+\begin{multicols*}{2}
+	\includegraphics[width=1.15\linewidth]{actiondfa.png}
+	\includegraphics[width=\linewidth]{language.png}
+\end{multicols*}
