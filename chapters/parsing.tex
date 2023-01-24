@@ -4,26 +4,26 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 
 Parsing uses a more powerful tool than regex - context free grammars (CFG). \medskip
 
-Chomsky Hierarchy: 
+Chomsky Hierarchy:
 \begin{compactitem}
 	\item Regular - Productions have at most one nonterminal and it is at the start or end of the word
 	\item Context-Free (CFG) - LHS of productions only have a single nonterminal
-	\item Context-Sensitive 
+	\item Context-Sensitive
 	\item Recursively Enumerable
 \end{compactitem}
 
 An example for a non CFG would be $a^n b^m c^n d^m$. This corresponds to methods having matching parameters.\medskip
-	
+
 A CFG consists of a set of terminals, a set of nonterminals, a start symbol and a set of productions. A production consists of a single nonterminal LHS and an arbitrary RHS. \medskip
 
 Derivation Orders - Productions can be applied in any order, however they will all lead to the same parse tree. There are two standard orders:
-\begin{itemize}
+\begin{compactitem}
 	\item Leftmost derivation: Find the left-most nonterminal and apply a production to it
 	\item Rightmost derivation: Find the right-most nonterminal and apply a production there
-\end{itemize}
+\end{compactitem}
 
 A grammar is \textbf{ambiguous} if there are multiple derivation trees for the same word. This can be a problem for associative operators. \medskip
-	
+
 In CFGs ambiguity can (often) be removed by adding nonterminals and allowing recursion only on one side. For example:\smallskip
 
 \begin{lstlisting}
@@ -42,9 +42,9 @@ Becomes:\smallskip
 \subsection*{LL Grammars and Top-Down Parsing}
 
 When parsing a grammar \textbf{top-down}, we can encounter the problem of multiple productions being possible. \medskip
-		
+
 LL(1) means \textbf{L}eft-to-right scanning, \textbf{L}eft-most derivation, \textbf{1} lookahead symbol. \medskip
-		
+
 Left-factoring a grammar can make it LL(1): If there is a common prefix we can add a new non-terminal at the decision point. We also need to eliminate left-recursion:\smallskip
 
 \begin{lstlisting}
@@ -61,11 +61,11 @@ Becomes:\smallskip
 To actually use these grammars, we need to translate them into a \textbf{parsing table}: \medskip
 
 For a given production $A \to \gamma$:
-\begin{itemize}
+\begin{compactitem}
 	\item Construct the \textbf{first set} of $A$, this set contains all terminals that begin strings derivable from the nonterminal. For each nonterminal of the first set, add the corresponding production to the table.
-	
+
 	\item Construct the \textbf{follow set} of $A$, this set contains all terminals that can appear immediately to the right of the given nonterminal. If $\epsilon$ is derivable by the production, add the corresponding production to the table.
-\end{itemize}
+\end{compactitem}
 
 \begin{center}
 	\includegraphics[width=\linewidth]{assets/ll1.png}
@@ -79,37 +79,37 @@ This can be extended to LL($k$) grammars by generating a bigger table.
 LR grammars are more expressive than LL grammars. They can handle left-recursive and right-recursive grammars. However error reporting is poorer. \medskip
 
 Bottom-up parsing is a sequence of \textbf{shift} and \textbf{reduce} operations:
-\begin{itemize}
+\begin{compactitem}
 	\item Shift: Move look-ahead token to stack.
-	
+
 	\item Reduce: Replace symbols $\gamma$ at the top of the stack with nonterminal $X$ such that $X \to \gamma$ is a production. Pop $\gamma$, push $X$.
-\end{itemize}
+\end{compactitem}
 
 The parser state is made up of a stack of nonterminals and terminals, as well as the so far unconsumed input.\medskip
-			
+
 Action Selection Problem:
-\begin{itemize}
+\begin{compactitem}
 	\item Given a stack $\sigma$ and a lookahead symbol $b$, should the parser \textbf{shift} $b$ onto the stack (new stack is $\sigma b$) , or \textbf{reduce} a production $X \mapsto \gamma$, assuming that $\sigma = \alpha \gamma$?
-	
+
 	\item Sometimes the parser can reduce, but should not, sometimes the stack can be reduced in different ways.
-\end{itemize}
+\end{compactitem}
 
 We want to decide based on a prefix $\alpha$ of the stack and the look-ahead. \medskip
-		
+
 In LR(0) we have states: items to track progress on possible upcoming reductions. An item is a production with an extra separator "." in the RHS. \medskip
-		
+
 The idea is that the stuff before the "." is already on the stack and the rest is what might be seen next. \medskip
-		
+
 Constructing the DFA:
-\begin{itemize}
+\begin{compactitem}
 	\item Add new production: $S' \to S\$$, this is the start of the DFA.
-						
+
 	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached.
-			
+
 	\item Add transitions for each possible next (non-)terminal. Shift the dot by one in each of those states.
-	
+
 	\item Every state that ends in a dot is a reduce state.
-\end{itemize} 
+\end{compactitem}
 
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/dfa.png}
@@ -128,36 +128,36 @@ To form the LR(1) closure, we first do the same as for LR(0). Additionally for e
 \begin{center}
 	\includegraphics[width=0.9\linewidth]{assets/lr1.png}
 \end{center}
-		
+
 For LR(1) we have a shift-reduce conflict if the shifted token is contained in the follow set of the reduction.
 
 
 \tikzset{every picture/.style={line width=0.7pt}} %set default line width to 0.75pt 
 
 \begin{center}
-\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1, xscale=1]
-%uncomment if require: \path (0,719); %set diagram left start at 0, and has height of 719
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1, xscale=1]
+		%uncomment if require: \path (0,719); %set diagram left start at 0, and has height of 719
 
-%Shape: Ellipse [id:dp342446435028968] 
-\draw   (505,130) .. controls (505,118.95) and (520.67,110) .. (540,110) .. controls (559.33,110) and (575,118.95) .. (575,130) .. controls (575,141.05) and (559.33,150) .. (540,150) .. controls (520.67,150) and (505,141.05) .. (505,130) -- cycle ;
-%Shape: Ellipse [id:dp31528986086353894] 
-\draw   (476.63,122.04) .. controls (476.63,102.73) and (504.02,87.07) .. (537.81,87.07) .. controls (571.61,87.07) and (599,102.73) .. (599,122.04) .. controls (599,141.35) and (571.61,157) .. (537.81,157) .. controls (504.02,157) and (476.63,141.35) .. (476.63,122.04) -- cycle ;
-%Shape: Ellipse [id:dp8349221817367837] 
-\draw   (450.47,107.09) .. controls (450.47,79.52) and (489.57,57.18) .. (537.81,57.18) .. controls (586.05,57.18) and (625.16,79.52) .. (625.16,107.09) .. controls (625.16,134.65) and (586.05,157) .. (537.81,157) .. controls (489.57,157) and (450.47,134.65) .. (450.47,107.09) -- cycle ;
-%Shape: Ellipse [id:dp22985392220585588] 
-\draw   (425.81,93) .. controls (425.81,57.65) and (475.96,29) .. (537.81,29) .. controls (599.67,29) and (649.81,57.65) .. (649.81,93) .. controls (649.81,128.35) and (599.67,157) .. (537.81,157) .. controls (475.96,157) and (425.81,128.35) .. (425.81,93) -- cycle ;
-%Shape: Ellipse [id:dp012648097779113021] 
-\draw  [fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=0.7 ] (492.16,41.05) .. controls (503.2,40.76) and (512.77,64.01) .. (513.53,92.99) .. controls (514.3,121.97) and (505.96,145.7) .. (494.92,145.99) .. controls (483.88,146.28) and (474.31,123.02) .. (473.55,94.05) .. controls (472.78,65.07) and (481.11,41.34) .. (492.16,41.05) -- cycle ;
+		%Shape: Ellipse [id:dp342446435028968] 
+		\draw   (505,130) .. controls (505,118.95) and (520.67,110) .. (540,110) .. controls (559.33,110) and (575,118.95) .. (575,130) .. controls (575,141.05) and (559.33,150) .. (540,150) .. controls (520.67,150) and (505,141.05) .. (505,130) -- cycle ;
+		%Shape: Ellipse [id:dp31528986086353894] 
+		\draw   (476.63,122.04) .. controls (476.63,102.73) and (504.02,87.07) .. (537.81,87.07) .. controls (571.61,87.07) and (599,102.73) .. (599,122.04) .. controls (599,141.35) and (571.61,157) .. (537.81,157) .. controls (504.02,157) and (476.63,141.35) .. (476.63,122.04) -- cycle ;
+		%Shape: Ellipse [id:dp8349221817367837] 
+		\draw   (450.47,107.09) .. controls (450.47,79.52) and (489.57,57.18) .. (537.81,57.18) .. controls (586.05,57.18) and (625.16,79.52) .. (625.16,107.09) .. controls (625.16,134.65) and (586.05,157) .. (537.81,157) .. controls (489.57,157) and (450.47,134.65) .. (450.47,107.09) -- cycle ;
+		%Shape: Ellipse [id:dp22985392220585588] 
+		\draw   (425.81,93) .. controls (425.81,57.65) and (475.96,29) .. (537.81,29) .. controls (599.67,29) and (649.81,57.65) .. (649.81,93) .. controls (649.81,128.35) and (599.67,157) .. (537.81,157) .. controls (475.96,157) and (425.81,128.35) .. (425.81,93) -- cycle ;
+		%Shape: Ellipse [id:dp012648097779113021] 
+		\draw  [fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=0.7 ] (492.16,41.05) .. controls (503.2,40.76) and (512.77,64.01) .. (513.53,92.99) .. controls (514.3,121.97) and (505.96,145.7) .. (494.92,145.99) .. controls (483.88,146.28) and (474.31,123.02) .. (473.55,94.05) .. controls (472.78,65.07) and (481.11,41.34) .. (492.16,41.05) -- cycle ;
 
-% Text Node
-\draw (520,123) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(0)};
-% Text Node
-\draw (523,94) node [anchor=north west][inner sep=0.75pt]   [align=left] {SLR};
-% Text Node
-\draw (514,66) node [anchor=north west][inner sep=0.75pt]   [align=left] {LALR(1)};
-% Text Node
-\draw (520,36) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(1)};
-% Text Node
-\draw (477, 84) node [anchor=north west][inner sep=0.75pt]   [align=left] {LL(1)};
-\end{tikzpicture}
+		% Text Node
+		\draw (520,123) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(0)};
+		% Text Node
+		\draw (523,94) node [anchor=north west][inner sep=0.75pt]   [align=left] {SLR};
+		% Text Node
+		\draw (514,66) node [anchor=north west][inner sep=0.75pt]   [align=left] {LALR(1)};
+		% Text Node
+		\draw (520,36) node [anchor=north west][inner sep=0.75pt]   [align=left] {LR(1)};
+		% Text Node
+		\draw (477, 84) node [anchor=north west][inner sep=0.75pt]   [align=left] {LL(1)};
+	\end{tikzpicture}
 \end{center}
