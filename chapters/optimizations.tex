@@ -142,6 +142,12 @@ Converting to SSA:
 	\item Eliminate unneeded \texttt{alloca}s
 \end{compactitem}\medskip
 
+
+%------------
+\columnbreak
+%------------
+
+
 Some \texttt{alloca}s are needed, either if the address of the variable is taken or the address escapes by being passed to a function. If neither condition holds, it is promotable.\medskip
 
 Necessary join points are defined as the transitive closure of the dominance frontier of all nodes where a variable $x$ is defined or modified. Then we just need to pick the value of $x$ depending on the predecessors of the node where we just inserted the $\phi$-node.\medskip
