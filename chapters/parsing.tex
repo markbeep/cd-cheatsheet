@@ -77,12 +77,11 @@ For a given production $A \to \gamma$:
 	\includegraphics[width=\linewidth]{assets/ll1.png}
 \end{center}
 \vspace{-10pt}
-Intuitively, if we're at nonterminal (\texttt{T, S, S'}) and at terminal $\gamma$ (\texttt{+, \$}), then what productions allow us to parse $\gamma$.
-
-\textbf{Is it an LL(1) grammar?} No, if there's a cell with multiple options.
+Intuitively, if we're at nonterminal (\texttt{T, S, S'}) then what productions allow us to parse the terminal (\texttt{+, \$}).
 
 This can be extended to LL($k$) grammars by generating a bigger table.
 
+\textbf{Is it an LL(1) grammar?} No, if there's a cell with multiple options.
 
 \subsection*{LR Grammars and Bottom-Up Parsing}
 
