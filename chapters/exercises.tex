@@ -17,6 +17,8 @@
 	\item[$\boxtimes$] LR parsers can handle left-recursive grammars.
 	\item[$\boxtimes$] LR parsers can handle right-recursive grammars.
 	\item[$\square$] LL parsers can handle left-recursive grammars.
+	\item[$\square$] LR(0) parsers are more powerful than LL(1) parsers.
+	\item[$\boxtimes$] even with an unambiguous CFG, there may be more than one derivation.
 \end{compactitem}
 
 \hrulefill
@@ -54,6 +56,16 @@
 
 \hrulefill
 
+\textbf{Ex.} Any type-safe program, ...
+\begin{compactitem} 
+	\item[$\boxtimes$] can raise en exception.
+	\item[$\square$] can treat non-code values as code.
+	\item[$\square$] always terminates.
+	\item[$\boxtimes$] can raise a segfault (unsure).
+\end{compactitem}
+
+\hrulefill
+
 \textbf{Ex.} Nominal subtyping, ...
 \begin{compactitem} 
 	\item[$\boxtimes$] requires us to explicitly declare subtyping relationships.
@@ -69,6 +81,34 @@
 	\item[$\boxtimes$] starts with a label.
 	\item[$\square$] can contain more than one control-flow instruction.
 	\item[$\boxtimes$] is always executed starting from the basic block's first instruction.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Strength reduction, ...
+\begin{compactitem}
+	\item[$\square$] refers to a class of optimizations that can be profitably applied irrespective of the target architecture.
+	\item[$\boxtimes$] is applicable to loops, by creating a dependent induction variable.
+	\item[$\square$] can only be meaningfully applied if the IR on which the optimization is applied is in SSA form.
+	\item[$\square$] reduces the static number of operations that are performed.
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Which of the following are examples of forward analysis?
+\begin{compactitem}
+	\item[$\square$] Liveness analysis
+	\item[$\boxtimes$] Available expressions
+	\item[$\boxtimes$] Available registers
+\end{compactitem}
+
+\hrulefill
+
+\textbf{Ex.} Which of the following statements are true?
+\begin{compactitem}
+	\item[$\square$] Contradictory to its name, the linear scan register allocation runs in a log-linear time in the number of program variables.
+	\item[$\square$] Spilling two registers is always less efficient than spilling one.
+	\item[$\square$] To apply linear scan register allocation, we need to compute the reaching definitions and the liveness analysis.
 \end{compactitem}
 
 \hrulefill
@@ -92,3 +132,21 @@ $\text{DF}_1[\{X, Y, Z, V\}] = \{V, W, Z, Y\}$,
 $\text{DF}_1[\{V, W, Z, Y\}] = \{V, W, Z, Y\} = J[\{X, Y, Z\}]$
 
 \hrulefill
+
+What are the types of the followint \texttt{getelementptr} instructions?
+\begin{lstlisting}
+	struct B {
+		int64_t c;
+		struct B *d;
+		struct A e[10][10];
+	}; 
+\end{lstlisting}
+
+\texttt{getelementptr \%struct.B* @g, i64 0} : \textcolor{blue}{\texttt{struct.B*}}
+
+\texttt{getelementptr \%struct.B* @g, i64 0, i64 0} : \textcolor{blue}{\texttt{i64*}}
+
+\texttt{gep \%struct.B* @g, i64 0, i64 2, i64 5} : \textcolor{blue}{\texttt{[10 x struct.A]*}}
+
+\hrulefill
+
