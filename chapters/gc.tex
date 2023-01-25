@@ -8,9 +8,18 @@ Reachable objects can be found by starting from registers and following all poin
 
 When memory runs out, GC executes two phases: mark phase: trace reachable objects; sweep phase: collects garbage objects (extra bit reserved for memory management)\medskip
 
-One problem is that it only runs when we are out of memory - yet we need memory to keep track of our todo-list (not yet checked pointers). The solution to this is \textbf{pointer reversal}. Pointer reversal enables a depth first traversal of the reachable objects without using additional memory. We keep only a backward and forward pointer. The forward pointer points to the next object to be examined and the backward pointer to the one we just handled. Whenever we follow a pointer, we update that pointer to point to the back pointer, the back pointer points to the current object we followed to it. \medskip
+One problem is that it only runs when we are out of memory - yet we need memory
+to keep track of our todo-list (not yet checked pointers). The solution to this
+is \textbf{pointer reversal}. Pointer reversal enables a DFS
+of the reachable objects without using additional memory. We keep only a
+backward and forward pointer. The forward pointer (\textbf{FP}) points to next object to
+be examined. The backward pointer (\textbf{BP}) points to the
+one we just handled.
+Each iteration we go along a pointer ($\text{P} \to new$): Set $\text{P} \to \text{BP}$,
+$\text{BP} \to cur$ and $\text{FP} \to new$.
 
-Once we checked every object, we go in reverse. We let the backpointed-object point to where the forward pointer is while following its pointer with the back pointer and update the forward pointer to the current object. \medskip
+When going back in reverse, we point the original pointer back to its original node.
+\medskip
 
 \textbf{Pros}: Objects stay in place, no need to update pointers. \textbf{Cons}: Fragmentation.\medskip
 

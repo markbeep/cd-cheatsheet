@@ -123,7 +123,15 @@ For a back edge $n \rightarrow h$, $h$ is the header. Loops with the same header
 
 A \textbf{loop} contains at least 1 back edge (\textbf{back edge} = target dominates the source).\medskip
 
-The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops.
+The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes
+$\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not
+strictly dominate $\gamma$.
+
+\textbf{How-to: Dominance Frontier}
+
+For each node $X$: All neighbor nodes it can get to that have some other way to get there
+are part of DF[$X$]. Then do the same for any nodes dominated by $X$ and add them all
+to DF[$X$].
 
 
 \subsection*{Single Static Assignment (SSA)}
