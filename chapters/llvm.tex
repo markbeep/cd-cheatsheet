@@ -1,9 +1,9 @@
 \section*{LLVM (Low Level Virtual Machine)}
 
 Storage Types: local variable \texttt{\%uid}, global variable \texttt{@gid}, abstract locations (stack-allocated with \texttt{alloca}), heap-allocated structures (\texttt{malloc}).\medskip
-	
+
 Each \texttt{\%uid} appears on the left-hand side of an assignment only once in the entire control flow graph (SSA).\medskip
-	
+
 The entry block of the CFG does not have to be labeled, the last instruction of a block is called the terminator. \medskip
 
 \textbf{Example Program:}
@@ -35,10 +35,10 @@ LLVM supports structured data with the use of \texttt{types}, e.g.:\medskip
 	%struct.Node = type {i64, %struct.Node*}
 \end{lstlisting}\medskip
 
-To computer pointer values of structs or index into arrays, LLVM provides the \texttt{getelementptr} instruction. Given a pointer and a path through the structured data pointed to by that pointer, GEP computes an address - analog of LEA.\medskip
+To compute pointer values of structs or index into arrays, LLVM provides the \texttt{getelementptr} instruction. Given a pointer and a path through the structured data pointed to by that pointer, GEP computes an address - analog of LEA.\medskip
 
 \begin{lstlisting}
 	getelementptr <ty>* <ptrval> {, <ty> <idx>}* 
 \end{lstlisting}\medskip
-		
+
 GEP never dereferences the address it is calculating.
