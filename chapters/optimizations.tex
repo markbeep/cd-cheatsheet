@@ -55,16 +55,20 @@ It holds: in[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n$] $\backslash
 
 \textbf{Reaching Definition} (Forward, May)\medskip
 
-What variable definitions reach a particular use of a variable? Used for constant and copy propagation. \texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp. end of the current node. \texttt{gen} is the current statement, if it defines a variable, and \texttt{kill} is all the other definitions of the defined variable. \medskip
+What variable definitions reach a particular use of a variable? Used for constant and copy propagation.
+\texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp.
+end of the current node. For a statement $d_i: A=B:$ we have $d_i \in \textbf{gen[n]}$ and $\textbf{kill[n]}=\{d_i | \text{$d_i$ defines A (LHS)} \;\backslash\; gen[n]$ (inclusive of previous nodes) \medskip
 
 \textbf{Available Expressions} (Forward, Must)\medskip
 
-Used for common subexpression elimination. \texttt{in / out} are the set of nodes whose values are available on entry / exit of the current node. \texttt{gen} is the current statement and \texttt{kill} is the set of all expressions that use the newly modified variable.\medskip
+Used for common subexpression elimination.
+\texttt{in / out} are the set of nodes whose values are available on entry / exit of the current node.
+For a statement $d_i: A=B:$ we have $d_i \in \textbf{gen[n]} \;\backslash\; \text{kill[n]}$ and $\textbf{kill[n]}=\{d_i | \text{$d_i$ uses A (RHS)}\}$\medskip
 
 \textbf{Very Busy} (Backward, Must)\medskip
 
 An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined.
-It is used for hoisting expressions. \textbf{in/out/gen allow for expressions (x+y, \ldots)} \medskip
+It is used for hoisting expressions. \textbf{in/out/gen allow for expressions (x+y)} \medskip
 
 \texttt{gen[B]} = \{expr; expr a op b is evaluated in B, neither a nor b are subsequently redefinded in B \}\smallskip
 
