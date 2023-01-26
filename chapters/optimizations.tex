@@ -115,25 +115,27 @@ Precolored Nodes: Certain variables must be pre-assigned to registers (\texttt{c
 
 \subsection*{Dominator Trees}
 
-We want to identify loops in a CFG. For that we use domination. $A$ dominates $B$ ($A$ dom $B$), if the only way to reach $B$ from start node is via $A$. This relation is transitive, reflexive and anti-symmetric. This can be computed as forward must dataflow analysis. $A$ strictly dominate $B$, if $A \neq B$ and $A$ dom $B$.\medskip
+To identify loops in a CFG we use domination. $A$ dominates $B$ ($A$ dom $B$), if the only way to reach $B$ from start node is via $A$. This relation is transitive, reflexive and anti-symmetric. This can be computed as forward must dataflow analysis. $A$ strictly dominate $B$, if $A \neq B$ and $A$ dom $B$. The Hasse diagram of the dominates relation is called the \textbf{dominator tree}.\medskip
 
-The Hasse diagram of the dominates relation is called the dominator tree.\medskip
+A loop is a set of nodes in the CFG, with a distinguished entry (header) and exit nodes. It is a strongly connected component (SSC), where every node is reachable from every other node. A loop contains at least 1 \textbf{back edge} (target dominates the source).\medskip
 
 \textbf{How-to: Natural Loop}
 
-For a back edge $S \rightarrow H$, $S=\text{source, }H=\text{header}$.
+For a back edge $s \rightarrow h$, $s=\text{source, }h=\text{header}$:
 \begin{compactitem}[$\quad\bullet$]
 	\item Look for all nodes dominated by your header (dominates itself)
-	\item From them, take the ones which you can use to reach $S$ without going through $H$
-	\item Merge loops with the same header $H$
-\end{compactitem}
-We can formally define a loop as
-$L(n \to h) = \{ n' | n \text{ is reachable from } n' \text{ in } G
-	\backslash\{h\}  \} \cup \{h\}$.
+	\item From these, take the ones which you can use to reach $s$ without going through $h$
+	\item Merge loops with the same header $h$
+\end{compactitem}\smallskip
 
+We can formally define a loop as:
+$$L(s \to h) = \{ n' \; | \; s \text{ is reachable from } n' \text{ in } G
+	\backslash\{h\}  \} \cup \{h\}$$
+
+\vspace{3pt}
 The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes
 $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not
-strictly dominate $\gamma$.
+strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops. \medskip
 
 \textbf{How-to: Dominance Frontier}
 
@@ -152,7 +154,7 @@ $J[N] = DF_k[N] \text{ where } DF_0 = DF[N];\; DF_{i+1}[N] = DF[DF_i[N] \cup N]$
 	\begin{compactitem}[$\quad\bullet$]
 		\item Find $DF_0[N] = DF[\{X,Y\}] = \{A\} \quad(DF[X] \cup DF[Y] \cup \ldots)$
 		\item Find $DF_1[N] = DF[\{X, Y, A\}] = \{Y,A,B\}$
-		\item Continue until same: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
+		\item Continue until: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
 		\item These are our \textbf{join points}: $J[N] = DF_2[N] = \{X,Y,A,B,C\}$
 	\end{compactitem}
 

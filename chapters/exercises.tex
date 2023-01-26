@@ -106,26 +106,6 @@ $$ \boxtimes \text{ True } \qquad \square \text{ False }$$
 
 \hrulefill
 
-\textbf{Ex.} Consider the following dominance frontier DF of a graph:
-DF[$ U $] = $\{ Y \}$,
-DF[$ V $] = $\{ Z, W, Y \}$,
-DF[$ W $] = $\{ V, Y \}$,
-DF[$ X $] = $\{  \}$,
-DF[$ Y $] = $\{ V \}$,
-DF[$ Z $] = $\{  \}$.
-There is a variable $x$ that is modified at nodes $N = \{X, Y, Z\}$. Determine all nodes
-where $\phi$ functions for $x$ have to be inserted, i.e., the join points for $N$ with respect to $x$.
-Determine the least fixed point of the sequence:
-$$J[N] = \text{DF}_k[N] \text{ where } \text{DF}_0[N] = \text{DF}[N]; \text{DF}_{i+1}[N] = \text{DF}[\text{DF}_i[N] \cup \{N\}]$$\smallskip
-
-$\text{DF}_0[\{X, Y, Z\}] = \{V\}$,
-
-$\text{DF}_1[\{X, Y, Z, V\}] = \{V, W, Z, Y\}$,
-
-$\text{DF}_1[\{V, W, Z, Y\}] = \{V, W, Z, Y\} = J[\{X, Y, Z\}]$
-
-\hrulefill
-
 \textbf{Ex.} What are the types of the followint \texttt{getelementptr} instructions?
 \begin{lstlisting}
 	struct B {
@@ -155,7 +135,7 @@ The problem is that multiple return values and arguments that interfere with eac
 \begin{center}
 	\includegraphics[width=0.5\linewidth]{before_ms.png}
 \end{center}
-
+\vspace{-20pt}
 \begin{multicols*}{2}
 	After Mark:
 
