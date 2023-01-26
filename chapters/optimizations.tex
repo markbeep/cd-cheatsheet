@@ -145,16 +145,19 @@ to DF[$X$].\medskip
 
 $J[N] = DF_k[N] \text{ where } DF_0 = DF[N];\; DF_{i+1}[N] = DF[DF_i[N] \cup N]$
 
-To determine the join points (places where $\phi$-nodes have to be inserted)
-for $N = \{X,Y\}$:
-\begin{compactitem}[$\quad\bullet$]
-	\item Find $DF_0[N] = DF[\{X,Y\}] = \{A\} \quad(DF[X] \cup DF[Y] \cup \ldots)$
-	\item Find $DF_1[N] = DF[\{X, Y, A\}] = \{Y,A,B\}$
-	\item Continue until same: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
-	\item These are our \textbf{join points}: $J[N] = DF_2[N] = \{X,Y,A,B,C\}$
-\end{compactitem}
+\begin{minipage}{\columnwidth} % very dirty, but it works to prevent random column break
 
-\subsection*{Single Static Assignment (SSA)}
+	To determine the join points (places where $\phi$-nodes have to be inserted)
+	for $N = \{X,Y\}$:
+	\begin{compactitem}[$\quad\bullet$]
+		\item Find $DF_0[N] = DF[\{X,Y\}] = \{A\} \quad(DF[X] \cup DF[Y] \cup \ldots)$
+		\item Find $DF_1[N] = DF[\{X, Y, A\}] = \{Y,A,B\}$
+		\item Continue until same: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
+		\item These are our \textbf{join points}: $J[N] = DF_2[N] = \{X,Y,A,B,C\}$
+	\end{compactitem}
+
+	\subsection*{Single Static Assignment (SSA)}
+\end{minipage}
 
 Each LLVM IR \texttt{\%uid} can be assigned only once. When coming from an \texttt{if-else} branch or similar, we might not know which \texttt{\%uid} to take. That's where we introduce $\phi$-nodes.\medskip
 
