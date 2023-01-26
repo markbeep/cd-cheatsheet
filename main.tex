@@ -72,39 +72,38 @@
 \begin{document}
 \begin{multicols*}{3}
 
-\fontsize{8pt}{8pt}\selectfont
+  \fontsize{8pt}{8pt}\selectfont
 
-\setlength{\abovedisplayskip}{2pt}
-\setlength{\belowdisplayskip}{0pt}
-\setlength{\abovedisplayshortskip}{0pt}
-\setlength{\belowdisplayshortskip}{0pt}
+  \setlength{\abovedisplayskip}{2pt}
+  \setlength{\belowdisplayskip}{0pt}
+  \setlength{\abovedisplayshortskip}{0pt}
+  \setlength{\belowdisplayshortskip}{0pt}
 
-% _____ CONTENT __________________________________________________
+  % _____ CONTENT __________________________________________________
 
-% main heading
-\begin{center}
-  \Large{\textbf{Compiler Design}} \\
-  \small{by dcamenisch}
-\end{center}
+  % main heading
+  \begin{center}
+    \Large{\textbf{Compiler Design}} \\
+    \small{by dcamenisch}
+  \end{center}
 
-%\input{chapters/introduction.tex}
+  %\input{chapters/introduction.tex}
+  \input{chapters/compiler.tex}
+  \input{chapters/x86.tex}
+  \input{chapters/intermediate.tex}
+  \input{chapters/llvm.tex}
+  \input{chapters/lexing.tex}
+  \input{chapters/parsing.tex}
+  \input{chapters/lambda_calculus.tex}
+  \input{chapters/typing.tex}
+  \input{chapters/compiling_objects.tex}
+  \input{chapters/optimizations.tex}
+  \input{chapters/gc.tex}
+  \input{chapters/exercises.tex}
 
-\input{chapters/compiler.tex}
-\input{chapters/x86.tex}
-\input{chapters/intermediate.tex}
-\input{chapters/llvm.tex}
-\input{chapters/lexing.tex}
-\input{chapters/parsing.tex}
-\input{chapters/lambda_calculus.tex}
-\input{chapters/typing.tex}
-\input{chapters/compiling_objects.tex}
-\input{chapters/optimizations.tex}
-\input{chapters/gc.tex}
-\input{chapters/exercises.tex}
-
-\begin{center}
-	\includegraphics[width=0.7\linewidth]{you_can_do_it.jpg}
-\end{center}
+  \begin{center}
+    \includegraphics[width=0.7\linewidth]{you_can_do_it.jpg}
+  \end{center}
 
 \end{multicols*}
 \end{document}

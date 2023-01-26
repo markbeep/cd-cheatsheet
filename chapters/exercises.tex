@@ -3,7 +3,7 @@
 \hrulefill
 
 \textbf{Ex.} In parsing, ...
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item[$\square$] LL(1) parsers are more powerful than LR(0) parsers.
 	\item[$\boxtimes$] LR(1) parsers are more powerful than LL(1) parsers.
 	\item[$\boxtimes$] LALR(1) may introduce new reduce/reduce conflicts compared to LR(1) when parsing the same grammar.
@@ -13,7 +13,7 @@
 \hrulefill
 
 \textbf{Ex.} For context free grammars, ...
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item[$\boxtimes$] LR parsers can handle left-recursive grammars.
 	\item[$\boxtimes$] LR parsers can handle right-recursive grammars.
 	\item[$\square$] LL parsers can handle left-recursive grammars.
@@ -41,7 +41,7 @@ $$ \boxtimes \text{ True } \qquad \square \text{ False }$$
 \hrulefill
 
 \textbf{Ex.} Calling conventions, ...
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item[$\boxtimes$] specify where arguments and return values should be stored.
 	\item[$\square$] specify the starting address of stack and heap.
 	\item[$\boxtimes$] can be disregarded by the compiler for functions that are not exposed to external callers as an optimization.
@@ -50,7 +50,7 @@ $$ \boxtimes \text{ True } \qquad \square \text{ False }$$
 \hrulefill
 
 \textbf{Ex.} Any type-safe program, ...
-\begin{compactitem} 
+\begin{compactitem}
 	\item[$\boxtimes$] can raise en exception.
 	\item[$\square$] can treat non-code values as code.
 	\item[$\square$] always terminates.
@@ -60,7 +60,7 @@ $$ \boxtimes \text{ True } \qquad \square \text{ False }$$
 \hrulefill
 
 \textbf{Ex.} Nominal subtyping, ...
-\begin{compactitem} 
+\begin{compactitem}[$\quad\bullet$]
 	\item[$\boxtimes$] requires us to explicitly declare subtyping relationships.
 	\item[$\square$] is used by OAT for struct subtyping.
 	\item[$\square$] is a subcategory of structural subtyping.
@@ -70,7 +70,7 @@ $$ \boxtimes \text{ True } \qquad \square \text{ False }$$
 \hrulefill
 
 \textbf{Ex.} A basic block, ...
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item[$\boxtimes$] starts with a label.
 	\item[$\square$] can contain more than one control-flow instruction.
 	\item[$\boxtimes$] is always executed starting from the basic block's first instruction.
@@ -118,9 +118,9 @@ where $\phi$ functions for $x$ have to be inserted, i.e., the join points for $N
 Determine the least fixed point of the sequence:
 $$J[N] = \text{DF}_k[N] \text{ where } \text{DF}_0[N] = \text{DF}[N]; \text{DF}_{i+1}[N] = \text{DF}[\text{DF}_i[N] \cup \{N\}]$$\smallskip
 
-$\text{DF}_0[\{X, Y, Z\}] = \{V\}$, 
+$\text{DF}_0[\{X, Y, Z\}] = \{V\}$,
 
-$\text{DF}_1[\{X, Y, Z, V\}] = \{V, W, Z, Y\}$, 
+$\text{DF}_1[\{X, Y, Z, V\}] = \{V, W, Z, Y\}$,
 
 $\text{DF}_1[\{V, W, Z, Y\}] = \{V, W, Z, Y\} = J[\{X, Y, Z\}]$
 
@@ -157,26 +157,26 @@ The problem is that multiple return values and arguments that interfere with eac
 \end{center}
 
 \begin{multicols*}{2}
-After Mark:
+	After Mark:
 
-\includegraphics[width=\linewidth]{mark.png}
+	\includegraphics[width=\linewidth]{mark.png}
 
-After Sweep:
+	After Sweep:
 
-\includegraphics[width=\linewidth]{sweep.png}
+	\includegraphics[width=\linewidth]{sweep.png}
 \end{multicols*}
 
 \hrulefill
 
 \textbf{Ex.} Apply Stop and Copy:
 \begin{multicols*}{2}
-Before:
+	Before:
 
-\includegraphics[width=\linewidth]{before_sc.png}
-\columnbreak
+	\includegraphics[width=\linewidth]{before_sc.png}
+	\columnbreak
 
-After:
-\vspace{-11pt}
+	After:
+	\vspace{-11pt}
 
-\includegraphics[width=\linewidth]{after_sc.png}
+	\includegraphics[width=\linewidth]{after_sc.png}
 \end{multicols*}

@@ -2,7 +2,7 @@
 
 There are different kinds of optimization: Power, Space, Time.
 
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item \textbf{Constant Folding}: If operands are statically known, compute value at compile-time. More general algebraic simplification: Use mathematical identities.
 
 	\item \textbf{Constant Propagation}: If $x$ is a constant replace its uses by the constant.
@@ -18,7 +18,7 @@ There are different kinds of optimization: Power, Space, Time.
 	\item \textbf{Common Subexpression Elimination}: It is the opposite of inlining, fold redundant computations together.
 
 	\item \textbf{Loop Optimizations}
-	\begin{compactitem}
+	\begin{compactitem}[$\quad\bullet$]
 		\item Hot spots often occur in loops (esp. inner loops)
 		\item Loop Invariant Code Motion (hoist outside)
 		\item Strength Reduction (replace expensive ops by cheap ones by creating a dependent induction variable)
@@ -55,18 +55,22 @@ It holds: in[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n$] $\backslash
 
 \textbf{Reaching Definition} (Forward, May)\medskip
 
-What variable definitions reach a particular use of a variable? Used for constant and copy propagation. \texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp. end of the current node. \texttt{gen} is the current statement, if it defines a variable, and \texttt{kill} is all the other definitions of the defined variable. \medskip
+What variable definitions reach a particular use of a variable? Used for constant and copy propagation.
+\texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp.
+end of the current node. For a statement $d_i: A=B:$ we have $d_i \in \textbf{gen[n]}$ and $\textbf{kill[n]}=\{d_i | \text{$d_i$ defines A (LHS)} \;\backslash\; gen[n]$ (inclusive of previous nodes) \medskip
 
 It holds: out[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n'$] if $n' \in$ pred[$n$] and out[$n$] $\supseteq$ in[$n$] $\backslash$ kill[$n$] or out[$n$] $\cup$ kill[$n$] $\supseteq$ in[$n$].\medskip
 
 \textbf{Available Expressions} (Forward, Must)\medskip
 
-Used for common subexpression elimination. \texttt{in / out} are the set of nodes whose values are available on entry / exit of the current node. \texttt{gen} is the current statement and \texttt{kill} is the set of all expressions that use the newly modified variable.\medskip
+Used for common subexpression elimination.
+\texttt{in / out} are the set of nodes whose values are available on entry / exit of the current node.
+For a statement $d_i: A=B:$ we have $d_i \in \textbf{gen[n]} \;\backslash\; \text{kill[n]}$ and $\textbf{kill[n]}=\{d_i | \text{$d_i$ uses A (RHS)}\}$\medskip
 
 \textbf{Very Busy} (Backward, Must)\medskip
 
 An expression is very busy at location $p$, if every path from $p$ must evaluate the expression before any variable is redefined.
-It is used for hoisting expressions. \textbf{in/out/gen allow for expressions (x+y, \ldots)} \medskip
+It is used for hoisting expressions. \textbf{in/out/gen allow for expressions (x+y)} \medskip
 
 \texttt{gen[B]} = \{expr; expr a op b is evaluated in B, neither a nor b are subsequently redefinded in B \}\smallskip
 
@@ -92,7 +96,7 @@ Compute liveness information and then scan through the program, for each instruc
 Compute liveness information for each temp, create an inference graph (nodes are temps and there is an edge if they are alive at the same time), try to color the graph.\medskip
 
 \textbf{Kempe's Algorithm}:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Find a node with degree $< k$ and cut it out of the graph
 	\item Recursively $k$-color the remaining subgraph
 	\item When remaining graph is colored, there must be at least one free color available for the deleted node.
@@ -115,14 +119,45 @@ We want to identify loops in a CFG. For that we use domination. $A$ dominates $B
 
 The Hasse diagram of the dominates relation is called the dominator tree.\medskip
 
-A loop is a set of nodes in the CFG, with a distinguished entry, the header, and exit nodes.
-It is a strongly connected component (SSC), every node is reachable from every other node.
-For a back edge $n \rightarrow h$, $h$ is the header. Loops with the same header can be merged (i.e $\{A,B,C\}, \{A,D\}$ can be merged to $\{A,B,C,D\}$). A \textbf{loop} contains at least 1 back edge (\textbf{back edge} = target dominates the source). We can formally define a loop as $L(n \to h) = \{ n' | n \text{ is reachable from } n' \text{ in } G \backslash\{h\}  \} \cup \{h\}$.\medskip
+\textbf{How-to: Natural Loop}
 
-The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops.
+For a back edge $S \rightarrow H$, $S=\text{source, }H=\text{header}$.
+\begin{compactitem}[$\quad\bullet$]
+	\item Look for all nodes dominated by your header (dominates itself)
+	\item From them, take the ones which you can use to reach $S$ without going through $H$
+	\item Merge loops with the same header $H$
+\end{compactitem}
+We can formally define a loop as
+$L(n \to h) = \{ n' | n \text{ is reachable from } n' \text{ in } G
+	\backslash\{h\}  \} \cup \{h\}$.
 
+The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes
+$\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not
+strictly dominate $\gamma$.
 
-\subsection*{Single Static Assignment (SSA)}
+\textbf{How-to: Dominance Frontier}
+
+For each node $X$: All neighbor nodes it can get to that have some other way to get there
+are part of DF[$X$]. Then do the same for any nodes dominated by $X$ and add them all
+to DF[$X$].\medskip
+
+\textbf{How-to: Least Fixed Point} of \textbf{Join Points}
+
+$J[N] = DF_k[N] \text{ where } DF_0 = DF[N];\; DF_{i+1}[N] = DF[DF_i[N] \cup N]$
+
+\begin{minipage}{\columnwidth} % very dirty, but it works to prevent random column break
+
+	To determine the join points (places where $\phi$-nodes have to be inserted)
+	for $N = \{X,Y\}$:
+	\begin{compactitem}[$\quad\bullet$]
+		\item Find $DF_0[N] = DF[\{X,Y\}] = \{A\} \quad(DF[X] \cup DF[Y] \cup \ldots)$
+		\item Find $DF_1[N] = DF[\{X, Y, A\}] = \{Y,A,B\}$
+		\item Continue until same: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
+		\item These are our \textbf{join points}: $J[N] = DF_2[N] = \{X,Y,A,B,C\}$
+	\end{compactitem}
+
+	\subsection*{Single Static Assignment (SSA)}
+\end{minipage}
 
 Each LLVM IR \texttt{\%uid} can be assigned only once. When coming from an \texttt{if-else} branch or similar, we might not know which \texttt{\%uid} to take. That's where we introduce $\phi$-nodes.\medskip
 
@@ -133,7 +168,7 @@ A $\phi$-node picks the version of a variable depending on the label from which 
 \end{lstlisting}\medskip
 
 Converting to SSA:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Start with CFG with \texttt{alloca}s, identify promotable \texttt{alloca}s
 	\item Compute dominator tree information
 	\item Calculate \texttt{def} / \texttt{use} information for each variable
