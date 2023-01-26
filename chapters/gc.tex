@@ -1,8 +1,6 @@
 \section*{Garbage Collection}
 
-An object \texttt{x} is reachable iff a register contains a pointer to \texttt{x} or another reachable object \texttt{y} contains a pointer to \texttt{x} (we also consider the stack as a source for pointers!). If an object is not reachable, we might want to consider it as garbage. \medskip
-	
-Reachable objects can be found by starting from registers and following all pointers. \medskip
+An object \texttt{x} is reachable iff a register contains a pointer to \texttt{x} or another reachable object \texttt{y} contains a pointer to \texttt{x} (we also consider the stack as a source for pointers!). If an object is not reachable, we might want to consider it as garbage. Reachable objects can be found by starting from registers and following all pointers. \medskip
 
 \textbf{Mark and Sweep} \smallskip
 	

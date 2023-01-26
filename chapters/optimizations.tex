@@ -57,6 +57,8 @@ It holds: in[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n$] $\backslash
 
 What variable definitions reach a particular use of a variable? Used for constant and copy propagation. \texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp. end of the current node. \texttt{gen} is the current statement, if it defines a variable, and \texttt{kill} is all the other definitions of the defined variable. \medskip
 
+It holds: out[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n'$] if $n' \in$ pred[$n$] and out[$n$] $\supseteq$ in[$n$] $\backslash$ kill[$n$] or out[$n$] $\cup$ kill[$n$] $\supseteq$ in[$n$].\medskip
+
 \textbf{Available Expressions} (Forward, Must)\medskip
 
 Used for common subexpression elimination. \texttt{in / out} are the set of nodes whose values are available on entry / exit of the current node. \texttt{gen} is the current statement and \texttt{kill} is the set of all expressions that use the newly modified variable.\medskip
@@ -115,9 +117,7 @@ The Hasse diagram of the dominates relation is called the dominator tree.\medski
 
 A loop is a set of nodes in the CFG, with a distinguished entry, the header, and exit nodes.
 It is a strongly connected component (SSC), every node is reachable from every other node.
-For a back edge $n \rightarrow h$, $h$ is the header. Loops with the same header can be merged (i.e $\{A,B,C\}, \{A,D\}$ can be merged to $\{A,B,C,D\}$). \medskip
-
-A \textbf{loop} contains at least 1 back edge (\textbf{back edge} = target dominates the source).\medskip
+For a back edge $n \rightarrow h$, $h$ is the header. Loops with the same header can be merged (i.e $\{A,B,C\}, \{A,D\}$ can be merged to $\{A,B,C,D\}$). A \textbf{loop} contains at least 1 back edge (\textbf{back edge} = target dominates the source). We can formally define a loop as $L(n \to h) = \{ n' | n \text{ is reachable from } n' \text{ in } G \backslash\{h\}  \} \cup \{h\}$.\medskip
 
 The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not strictly dominate $\gamma$. Intuitively: starting at $A$, there is a path to $\gamma$, but there is another route that does not go through $A$. It is the set of nodes where $A$'s dominance stops.
 
@@ -141,11 +141,6 @@ Converting to SSA:
 	\item Replace \texttt{load} / \texttt{stores} with freshly generated \texttt{\%uid}s
 	\item Eliminate unneeded \texttt{alloca}s
 \end{compactitem}\medskip
-
-
-%------------
-\columnbreak
-%------------
 
 
 Some \texttt{alloca}s are needed, either if the address of the variable is taken or the address escapes by being passed to a function. If neither condition holds, it is promotable.\medskip
