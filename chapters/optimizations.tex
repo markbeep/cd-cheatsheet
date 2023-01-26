@@ -59,6 +59,8 @@ What variable definitions reach a particular use of a variable? Used for constan
 \texttt{in / out} is the set of nodes defining some variable such that the definition may reach the beginning resp.
 end of the current node. For a statement $d_i: A=B:$ we have $d_i \in \textbf{gen[n]}$ and $\textbf{kill[n]}=\{d_i | \text{$d_i$ defines A (LHS)} \;\backslash\; gen[n]$ (inclusive of previous nodes) \medskip
 
+It holds: out[$n$] $\supseteq$ gen[$n$], in[$n$] $\supseteq$ out[$n'$] if $n' \in$ pred[$n$] and out[$n$] $\supseteq$ in[$n$] $\backslash$ kill[$n$] or out[$n$] $\cup$ kill[$n$] $\supseteq$ in[$n$].\medskip
+
 \textbf{Available Expressions} (Forward, Must)\medskip
 
 Used for common subexpression elimination.
@@ -125,6 +127,9 @@ For a back edge $S \rightarrow H$, $S=\text{source, }H=\text{header}$.
 	\item From them, take the ones which you can use to reach $S$ without going through $H$
 	\item Merge loops with the same header $H$
 \end{compactitem}
+We can formally define a loop as
+$L(n \to h) = \{ n' | n \text{ is reachable from } n' \text{ in } G
+	\backslash\{h\}  \} \cup \{h\}$.
 
 The \textbf{dominance frontier} of a node $A$ is the set of all CFG nodes
 $\gamma$ such that $A$ dominates a predecessor of $\gamma$, but does not
