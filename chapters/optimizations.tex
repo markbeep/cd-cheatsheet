@@ -2,7 +2,7 @@
 
 There are different kinds of optimization: Power, Space, Time.
 
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item \textbf{Constant Folding}: If operands are statically known, compute value at compile-time. More general algebraic simplification: Use mathematical identities.
 
 	\item \textbf{Constant Propagation}: If $x$ is a constant replace its uses by the constant.
@@ -18,7 +18,7 @@ There are different kinds of optimization: Power, Space, Time.
 	\item \textbf{Common Subexpression Elimination}: It is the opposite of inlining, fold redundant computations together.
 
 	\item \textbf{Loop Optimizations}
-	\begin{compactitem}
+	\begin{compactitem}[$\quad\bullet$]
 		\item Hot spots often occur in loops (esp. inner loops)
 		\item Loop Invariant Code Motion (hoist outside)
 		\item Strength Reduction (replace expensive ops by cheap ones by creating a dependent induction variable)
@@ -94,7 +94,7 @@ Compute liveness information and then scan through the program, for each instruc
 Compute liveness information for each temp, create an inference graph (nodes are temps and there is an edge if they are alive at the same time), try to color the graph.\medskip
 
 \textbf{Kempe's Algorithm}:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Find a node with degree $< k$ and cut it out of the graph
 	\item Recursively $k$-color the remaining subgraph
 	\item When remaining graph is colored, there must be at least one free color available for the deleted node.
@@ -120,7 +120,7 @@ The Hasse diagram of the dominates relation is called the dominator tree.\medski
 \textbf{How-to: Natural Loop}
 
 For a back edge $S \rightarrow H$, $S=\text{source, }H=\text{header}$.
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Look for all nodes dominated by your header (dominates itself)
 	\item From them, take the ones which you can use to reach $S$ without going through $H$
 	\item Merge loops with the same header $H$
@@ -140,12 +140,12 @@ to DF[$X$].\medskip
 
 $J[N] = DF_k[N] \text{ where } DF_0 = DF[N];\; DF_{i+1}[N] = DF[DF_i[N] \cup N]$
 
-To determine least fixed point (places where $\phi$-functions have to be inserted)
+To determine the join points (places where $\phi$-nodes have to be inserted)
 for $N = \{X,Y\}$:
-\begin{compactitem}
-	\item Find $DF[N] = DF_0[\{X,Y\}] = \{X,Y,A\}$
-	\item Find $DF_1[\{X, Y, A, B\}] = \{X,Y,A,B,C\}$
-	\item Continue until same: $DF_2[\textcolor{blue}{\{X,Y,A,B,C\}}] = \textcolor{blue}{\{X,Y,A,B,C\}}$
+\begin{compactitem}[$\quad\bullet$]
+	\item Find $DF_0[N] = DF[\{X,Y\}] = \{A\} \quad(DF[X] \cup DF[Y] \cup \ldots)$
+	\item Find $DF_1[N] = DF[\{X, Y, A\}] = \{Y,A,B\}$
+	\item Continue until same: $DF_2[N] = DF[\textcolor{blue}{\{X,Y,A,B\}}] = \textcolor{blue}{\{X,Y,A,B\}}$
 	\item These are our \textbf{join points}: $J[N] = DF_2[N] = \{X,Y,A,B,C\}$
 \end{compactitem}
 
@@ -160,7 +160,7 @@ A $\phi$-node picks the version of a variable depending on the label from which 
 \end{lstlisting}\medskip
 
 Converting to SSA:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Start with CFG with \texttt{alloca}s, identify promotable \texttt{alloca}s
 	\item Compute dominator tree information
 	\item Calculate \texttt{def} / \texttt{use} information for each variable

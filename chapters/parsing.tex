@@ -5,7 +5,7 @@ In this part we take the token stream and generate an abstract syntax tree (AST)
 Parsing uses a more powerful tool than regex - context free grammars (CFG). \medskip
 
 Chomsky Hierarchy:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Regular - Productions have at most one nonterminal and it is at the start or end of the word
 	\item Context-Free (CFG) - LHS of productions only have a single nonterminal
 	\item Context-Sensitive
@@ -17,7 +17,7 @@ An example for a non CFG would be $a^n b^m c^n d^m$. This corresponds to methods
 A CFG consists of a set of terminals, a set of nonterminals, a start symbol and a set of productions. A production consists of a single nonterminal LHS and an arbitrary RHS. \medskip
 
 Derivation Orders - Productions can be applied in any order, however they will all lead to the same parse tree. There are two standard orders:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Leftmost derivation: Find the left-most nonterminal and apply a production to it
 	\item Rightmost derivation: Find the right-most nonterminal and apply a production there
 \end{compactitem}
@@ -67,7 +67,7 @@ Becomes:\smallskip
 To actually use these grammars, we need to translate them into a \textbf{parsing table}: \medskip
 
 For a given production $A \to \gamma$:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Construct the \textbf{first set} of $A$, this set contains all terminals that begin strings derivable from the nonterminal. For each nonterminal of the first set, add the corresponding production to the table.
 
 	\item Construct the \textbf{follow set} of $A$, this set contains all terminals that can appear immediately to the right of the given nonterminal. If $\epsilon$ is derivable by the production, add the corresponding production to the table.
@@ -88,7 +88,7 @@ This can be extended to LL($k$) grammars by generating a bigger table.
 LR grammars are more expressive than LL grammars. They can handle left-recursive and right-recursive grammars. However error reporting is poorer. \medskip
 
 Bottom-up parsing is a sequence of \textbf{shift} and \textbf{reduce} operations:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Shift: Move look-ahead token to stack.
 
 	\item Reduce: Replace symbols $\gamma$ at the top of the stack with nonterminal $X$ such that $X \to \gamma$ is a production. Pop $\gamma$, push $X$.
@@ -97,7 +97,7 @@ Bottom-up parsing is a sequence of \textbf{shift} and \textbf{reduce} operations
 The parser state is made up of a stack of nonterminals and terminals, as well as the so far unconsumed input.\medskip
 
 Action Selection Problem:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Given a stack $\sigma$ and a lookahead symbol $b$, should the parser \textbf{shift} $b$ onto the stack (new stack is $\sigma b$) , or \textbf{reduce} a production $X \mapsto \gamma$, assuming that $\sigma = \alpha \gamma$?
 
 	\item Sometimes the parser can reduce, but should not, sometimes the stack can be reduced in different ways.
@@ -110,7 +110,7 @@ In LR(0) we have states: items to track progress on possible upcoming reductions
 The idea is that the stuff before the "." is already on the stack and the rest is what might be seen next. \medskip
 
 Constructing the DFA:
-\begin{compactitem}
+\begin{compactitem}[$\quad\bullet$]
 	\item Add new production: $S' \to S\$$, this is the start of the DFA.
 
 	\item Add all productions whose LHS occurs in an item in the state just after the dot. Note that these items can cause more items to be added until a fixpoint is reached (duplicates allowed).
